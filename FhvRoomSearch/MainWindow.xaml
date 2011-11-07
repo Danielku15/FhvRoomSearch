@@ -7,7 +7,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Command="{Binding SerializeCommand}">Serialize</Button>
+        <Button Command="{Binding SerializeCommand}">Dump</Button>
         <TextBox Grid.Row="1" Text="{Binding SerializedModel}"></TextBox>
     </Grid>
 </Window>

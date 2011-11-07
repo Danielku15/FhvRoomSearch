@@ -62,11 +62,10 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" />
     <Property Name="StartTime" Type="datetime" Nullable="false" />
     <Property Name="EndTime" Type="datetime" Nullable="false" />
     <Property Name="Category" Type="nvarchar" Nullable="false" />
-    <Property Name="Note" Type="nvarchar" Nullable="false" />
+    <Property Name="Notes" Type="nvarchar" Nullable="false" />
     <Property Name="Module" Type="nvarchar" Nullable="false" />
     <Property Name="Lecturer" Type="nvarchar" Nullable="false" />
     <Property Name="Group" Type="nvarchar" Nullable="false" />
@@ -195,11 +194,10 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Rooms" Relationship="RoomCourseModel.RoomCourse" FromRole="Course" ToRole="Room" />
-          <Property Type="String" Name="Name" Nullable="false" />
           <Property Type="DateTime" Name="StartTime" Nullable="false" />
           <Property Type="DateTime" Name="EndTime" Nullable="false" />
           <Property Type="String" Name="Category" Nullable="false" />
-          <Property Type="String" Name="Note" Nullable="false" />
+          <Property Type="String" Name="Notes" Nullable="false" />
           <Property Type="String" Name="Module" Nullable="false" />
           <Property Type="String" Name="Lecturer" Nullable="false" />
           <Property Type="String" Name="Group" Nullable="false" />
@@ -248,11 +246,10 @@
       <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Course)">
         <MappingFragment StoreEntitySet="CourseSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="StartTime" ColumnName="StartTime" />
           <ScalarProperty Name="EndTime" ColumnName="EndTime" />
           <ScalarProperty Name="Category" ColumnName="Category" />
-          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
           <ScalarProperty Name="Module" ColumnName="Module" />
           <ScalarProperty Name="Lecturer" ColumnName="Lecturer" />
           <ScalarProperty Name="Group" ColumnName="Group" />
@@ -313,10 +310,10 @@
           <ConnectorPoint PointX="2" PointY="2.797841796875" />
           <ConnectorPoint PointX="2.875" PointY="2.797841796875" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="RoomCourseModel.Course" Width="1.5" PointX="7.875" PointY="2" Height="2.9417936197916656" />
+        <EntityTypeShape EntityType="RoomCourseModel.Course" Width="1.5" PointX="7.875" PointY="2" Height="2.7494921874999996" />
         <AssociationConnector Association="RoomCourseModel.RoomCourse">
-          <ConnectorPoint PointX="6.5" PointY="3.4708968098958328" />
-          <ConnectorPoint PointX="7.875" PointY="3.4708968098958328" />
+          <ConnectorPoint PointX="6.5" PointY="3.37474609375" />
+          <ConnectorPoint PointX="7.875" PointY="3.37474609375" />
         </AssociationConnector>
       </Diagram>
     </edmx:Diagrams>

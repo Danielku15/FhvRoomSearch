@@ -7,7 +7,9 @@ using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
 using FhvRoomSearch.Commands;
+using FhvRoomSearch.Import;
 using FhvRoomSearch.Model;
+using Microsoft.Win32;
 
 namespace FhvRoomSearch.ViewModel
 {
@@ -49,15 +51,30 @@ namespace FhvRoomSearch.ViewModel
         {
             try
             {
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.Filter = "iCal Files (*.ical,*.ics)|*.ical;*.ics";
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Wing));
-                using (StringWriter writer = new StringWriter())
+                if(dlg.ShowDialog().GetValueOrDefault())
                 {
-                    foreach (var wing in _database.WingSet)
+                    try
                     {
-                        serializer.Serialize(writer, wing);
+                        using (StreamReader reader = new StreamReader(dlg.FileName, Encoding.UTF8))
+                        {
+                            FhvICalParser parser = new FhvICalParser(reader);
+                            parser.Parse();
+
+                            var data = parser.ParsedData;
+                        }
                     }
-                    SerializedModel = writer.ToString();
+                    catch (ImportException)
+                    {
+                        throw;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new ImportException(string.Format("Error loading the calendar file: {0}", e.Message), e);
+                    }
+                    
                 }
 
             }

@@ -193,23 +193,21 @@ namespace FhvRoomSearch.Model
         /// Create a new Course object.
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
-        /// <param name="name">Initial value of the Name property.</param>
         /// <param name="startTime">Initial value of the StartTime property.</param>
         /// <param name="endTime">Initial value of the EndTime property.</param>
         /// <param name="category">Initial value of the Category property.</param>
-        /// <param name="note">Initial value of the Note property.</param>
+        /// <param name="notes">Initial value of the Notes property.</param>
         /// <param name="module">Initial value of the Module property.</param>
         /// <param name="lecturer">Initial value of the Lecturer property.</param>
         /// <param name="group">Initial value of the Group property.</param>
-        public static Course CreateCourse(global::System.Int32 id, global::System.String name, global::System.DateTime startTime, global::System.DateTime endTime, global::System.String category, global::System.String note, global::System.String module, global::System.String lecturer, global::System.String group)
+        public static Course CreateCourse(global::System.Int32 id, global::System.DateTime startTime, global::System.DateTime endTime, global::System.String category, global::System.String notes, global::System.String module, global::System.String lecturer, global::System.String group)
         {
             Course course = new Course();
             course.Id = id;
-            course.Name = name;
             course.StartTime = startTime;
             course.EndTime = endTime;
             course.Category = category;
-            course.Note = note;
+            course.Notes = notes;
             course.Module = module;
             course.Lecturer = lecturer;
             course.Group = group;
@@ -245,30 +243,6 @@ namespace FhvRoomSearch.Model
         private global::System.Int32 _Id;
         partial void OnIdChanging(global::System.Int32 value);
         partial void OnIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                OnNameChanging(value);
-                ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Name");
-                OnNameChanged();
-            }
-        }
-        private global::System.String _Name;
-        partial void OnNameChanging(global::System.String value);
-        partial void OnNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -347,24 +321,24 @@ namespace FhvRoomSearch.Model
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Note
+        public global::System.String Notes
         {
             get
             {
-                return _Note;
+                return _Notes;
             }
             set
             {
-                OnNoteChanging(value);
-                ReportPropertyChanging("Note");
-                _Note = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Note");
-                OnNoteChanged();
+                OnNotesChanging(value);
+                ReportPropertyChanging("Notes");
+                _Notes = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Notes");
+                OnNotesChanged();
             }
         }
-        private global::System.String _Note;
-        partial void OnNoteChanging(global::System.String value);
-        partial void OnNoteChanged();
+        private global::System.String _Notes;
+        partial void OnNotesChanging(global::System.String value);
+        partial void OnNotesChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
