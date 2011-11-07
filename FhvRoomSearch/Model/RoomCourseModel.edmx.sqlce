@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server Compact Edition
 -- --------------------------------------------------
--- Date Created: 11/07/2011 19:49:53
+-- Date Created: 11/08/2011 00:49:07
 -- Generated from EDMX file: D:\Dev\C#\Projects\FhvRoomSearch\FhvRoomSearch\Model\RoomCourseModel.edmx
 -- --------------------------------------------------
 
@@ -16,7 +16,9 @@
 GO
     ALTER TABLE [LevelSet] DROP CONSTRAINT [FK_WingLevel];
 GO
-    ALTER TABLE [CourseSet] DROP CONSTRAINT [FK_RoomCourse];
+    ALTER TABLE [RoomCourse] DROP CONSTRAINT [FK_RoomCourse_Room];
+GO
+    ALTER TABLE [RoomCourse] DROP CONSTRAINT [FK_RoomCourse_Course];
 GO
 
 -- --------------------------------------------------
@@ -31,6 +33,8 @@ GO
     DROP TABLE [WingSet];
 GO
     DROP TABLE [CourseSet];
+GO
+    DROP TABLE [RoomCourse];
 GO
 
 -- --------------------------------------------------
@@ -69,11 +73,10 @@ GO
 -- Creating table 'CourseSet'
 CREATE TABLE [CourseSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(4000)  NOT NULL,
     [StartTime] datetime  NOT NULL,
     [EndTime] datetime  NOT NULL,
     [Category] nvarchar(4000)  NOT NULL,
-    [Note] nvarchar(4000)  NOT NULL,
+    [Notes] nvarchar(4000)  NOT NULL,
     [Module] nvarchar(4000)  NOT NULL,
     [Lecturer] nvarchar(4000)  NOT NULL,
     [Group] nvarchar(4000)  NOT NULL
