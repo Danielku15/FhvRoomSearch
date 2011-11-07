@@ -1,0 +1,17 @@
+﻿<Window x:Class="FhvRoomSearch.RoomConverterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RoomConverterWindow" Height="360" Width="637">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <TextBox AcceptsReturn="True" Text="{Binding InputString, UpdateSourceTrigger=PropertyChanged}" HorizontalScrollBarVisibility="Auto"  />
+        </Grid>
+        <Grid Grid.Column="1">
+            <TextBox AcceptsReturn="True" Text="{Binding OutputString}" HorizontalScrollBarVisibility="Auto" />
+        </Grid>
+    </Grid>
+</Window>

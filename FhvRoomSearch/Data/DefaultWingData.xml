@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DefaultData>
+  <Wing Name="A">
+    <Level Name="A0">
+      <Room RoomId="A001" RoomName="Veranstaltungssaal (Aula)" Tables="0" Chairs="178" Computers="0" ExtrasValue="" ChairTypeValue="" />
+    </Level>
+  </Wing>
+  <Wing Name="B">
+    <Level Name="B0">
+    </Level>
+    <Level Name="B1">
+    </Level>
+    <Level Name="B2">
+    </Level>
+    <Level Name="B3">
+    </Level>
+  </Wing>
+  <Wing Name="C" />
+  <Wing Name="D">
+    <Level Name="D0">
+    </Level>
+  </Wing>
+  <Wing Name="E">
+    <Level Name="E0">
+    </Level>
+  </Wing>
+  <Wing Name="F" />
+  <Wing Name="S">
+    <Level Name="S0">
+    </Level>
+  </Wing>
+  <Wing Name="U">
+    <Level Name="S0">
+    </Level>
+    <Level Name="S1">
+    </Level>
+    <Level Name="S2">
+    </Level>
+    <Level Name="S3">
+    </Level>
+    <Level Name="S4">
+    </Level>
+  </Wing>
+  <Wing Name="V">
+    <Level Name="V0">
+    </Level>
+    <Level Name="V1">
+    </Level>
+    <Level Name="V2">
+    </Level>
+    <Level Name="V3">
+    </Level>
+    <Level Name="V4">
+    </Level>
+  </Wing>
+  <Wing Name="W">
+    <Level Name="W0">
+    </Level>
+    <Level Name="W1">
+    </Level>
+    <Level Name="W2">
+    </Level>
+    <Level Name="W3">
+    </Level>
+    <Level Name="W4">
+    </Level>
+  </Wing>
+</DefaultData>
