@@ -1,0 +1,181 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server Compact Edition
+-- --------------------------------------------------
+-- Date Created: 11/07/2011 19:49:53
+-- Generated from EDMX file: D:\Dev\C#\Projects\FhvRoomSearch\FhvRoomSearch\Model\RoomCourseModel.edmx
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- NOTE: if the constraint does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    ALTER TABLE [RoomSet] DROP CONSTRAINT [FK_LevelRoom];
+GO
+    ALTER TABLE [LevelSet] DROP CONSTRAINT [FK_WingLevel];
+GO
+    ALTER TABLE [CourseSet] DROP CONSTRAINT [FK_RoomCourse];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- NOTE: if the table does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    DROP TABLE [RoomSet];
+GO
+    DROP TABLE [LevelSet];
+GO
+    DROP TABLE [WingSet];
+GO
+    DROP TABLE [CourseSet];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'RoomSet'
+CREATE TABLE [RoomSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [RoomId] nvarchar(4000)  NOT NULL,
+    [RoomName] nvarchar(4000)  NOT NULL,
+    [Tables] int  NOT NULL,
+    [Chairs] int  NOT NULL,
+    [Computers] int  NOT NULL,
+    [ExtrasValue] int  NOT NULL,
+    [ChairTypeValue] int  NOT NULL,
+    [Level_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'LevelSet'
+CREATE TABLE [LevelSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(4000)  NOT NULL,
+    [Wing_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'WingSet'
+CREATE TABLE [WingSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(4000)  NOT NULL
+);
+GO
+
+-- Creating table 'CourseSet'
+CREATE TABLE [CourseSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(4000)  NOT NULL,
+    [StartTime] datetime  NOT NULL,
+    [EndTime] datetime  NOT NULL,
+    [Category] nvarchar(4000)  NOT NULL,
+    [Note] nvarchar(4000)  NOT NULL,
+    [Module] nvarchar(4000)  NOT NULL,
+    [Lecturer] nvarchar(4000)  NOT NULL,
+    [Group] nvarchar(4000)  NOT NULL
+);
+GO
+
+-- Creating table 'RoomCourse'
+CREATE TABLE [RoomCourse] (
+    [Rooms_Id] int  NOT NULL,
+    [Course_Id] int  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [Id] in table 'RoomSet'
+ALTER TABLE [RoomSet]
+ADD CONSTRAINT [PK_RoomSet]
+    PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Id] in table 'LevelSet'
+ALTER TABLE [LevelSet]
+ADD CONSTRAINT [PK_LevelSet]
+    PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Id] in table 'WingSet'
+ALTER TABLE [WingSet]
+ADD CONSTRAINT [PK_WingSet]
+    PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Id] in table 'CourseSet'
+ALTER TABLE [CourseSet]
+ADD CONSTRAINT [PK_CourseSet]
+    PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Rooms_Id], [Course_Id] in table 'RoomCourse'
+ALTER TABLE [RoomCourse]
+ADD CONSTRAINT [PK_RoomCourse]
+    PRIMARY KEY ([Rooms_Id], [Course_Id] );
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [Level_Id] in table 'RoomSet'
+ALTER TABLE [RoomSet]
+ADD CONSTRAINT [FK_LevelRoom]
+    FOREIGN KEY ([Level_Id])
+    REFERENCES [LevelSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_LevelRoom'
+CREATE INDEX [IX_FK_LevelRoom]
+ON [RoomSet]
+    ([Level_Id]);
+GO
+
+-- Creating foreign key on [Wing_Id] in table 'LevelSet'
+ALTER TABLE [LevelSet]
+ADD CONSTRAINT [FK_WingLevel]
+    FOREIGN KEY ([Wing_Id])
+    REFERENCES [WingSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_WingLevel'
+CREATE INDEX [IX_FK_WingLevel]
+ON [LevelSet]
+    ([Wing_Id]);
+GO
+
+-- Creating foreign key on [Rooms_Id] in table 'RoomCourse'
+ALTER TABLE [RoomCourse]
+ADD CONSTRAINT [FK_RoomCourse_Room]
+    FOREIGN KEY ([Rooms_Id])
+    REFERENCES [RoomSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Course_Id] in table 'RoomCourse'
+ALTER TABLE [RoomCourse]
+ADD CONSTRAINT [FK_RoomCourse_Course]
+    FOREIGN KEY ([Course_Id])
+    REFERENCES [CourseSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RoomCourse_Course'
+CREATE INDEX [IX_FK_RoomCourse_Course]
+ON [RoomCourse]
+    ([Course_Id]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
