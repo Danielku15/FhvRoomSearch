@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FHV Room Searcher")]
-[assembly: AssemblyDescription("An application for searching unoccupied rooms in the FHV.")]
+[assembly: AssemblyTitle("FHV Room Searcher Core")]
+[assembly: AssemblyDescription("This library contains the core part of the FHV Room Searcher.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Daniel Kuschny")]
 [assembly: AssemblyProduct("FHV Room Searcher")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("48f2114f-030c-4309-972d-c03aa5fcc567")]
+[assembly: Guid("94f971a2-5acf-41e1-a777-05bd7f35f9d1")]
 
 // Version information for an assembly consists of the following four values:
 //
