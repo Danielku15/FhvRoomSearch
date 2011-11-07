@@ -15,9 +15,13 @@ namespace FhvRoomSearch.Import
 
         public IList<Wing> ParsedData { get; private set; }
 
-        public FhvICalParser(IICalendar iICalendar)
+        public FhvICalParser(IICalendar calendar)
         {
-            _calendar = iICalendar;
+            if(calendar == null)
+            {
+                throw new ArgumentNullException("calendar");
+            }
+            _calendar = calendar;
         }
 
         public void Parse()
