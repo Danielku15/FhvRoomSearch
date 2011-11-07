@@ -96,7 +96,7 @@ namespace FhvRoomSearch.ViewModel
 
         private void ParseRoomData(Room room, string p)
         {
-            string s = p.ToLower().Replace("kb ", "kb").Replace("\n", " ").Replace("\r", " ").Replace("\t", " ").Replace("(", "").Replace(")", "");
+            string s = p.ToLower().Replace("kb ", "kb").Replace("\n", " ").Replace("\r", " ").Replace("\t", " ").Replace("(", "").Replace(")", "").Replace("*", "");
 
             string[] parts = s.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
