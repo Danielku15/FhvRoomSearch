@@ -8,12 +8,10 @@ namespace FhvRoomSearch
     /// </summary>
     public partial class MainWindow
     {
-        private readonly MainWindowViewModel _viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
-            _viewModel = new MainWindowViewModel();
-            DataContext = _viewModel;
         }
     }
 }

@@ -22,5 +22,17 @@ namespace FhvRoomSearch.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CalendarUrl {
+            get {
+                return ((string)(this["CalendarUrl"]));
+            }
+            set {
+                this["CalendarUrl"] = value;
+            }
+        }
     }
 }

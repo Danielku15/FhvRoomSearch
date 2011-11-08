@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using FhvRoomSearch.Model;
+using GalaSoft.MvvmLight;
 
 namespace FhvRoomSearch.ViewModel
 {
@@ -20,7 +21,7 @@ namespace FhvRoomSearch.ViewModel
                     return;
                 _inputString = value.Trim();
                 UpdateOutput();
-                OnPropertyChanged("InputString");
+                RaisePropertyChanged("InputString");
             }
         }
 
@@ -36,7 +37,7 @@ namespace FhvRoomSearch.ViewModel
                 if (_outputString == value)
                     return;
                 _outputString = value;
-                OnPropertyChanged("OutputString");
+                RaisePropertyChanged("OutputString");
             }
         }
 
