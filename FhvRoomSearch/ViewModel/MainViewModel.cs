@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
 using FhvRoomSearch.Behavior;
+using FhvRoomSearch.IO;
 using FhvRoomSearch.Import;
 using FhvRoomSearch.Model;
 using GalaSoft.MvvmLight;
@@ -180,37 +181,81 @@ namespace FhvRoomSearch.ViewModel
             try
             {
                 _showCalendarViewerAfterReload = false;
-                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server");
+                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server (Checking for Changes)");
+
+                //
+                // Check for Changes
+                //
 
                 // make HTTP request
                 WebRequest request = WebRequest.Create(url);
                 request.Proxy = null;
 
+                // use HEAD to determine chnages
+                request.Method = "HEAD";
+
                 // get response
-                WebResponse response = request.GetResponse();
-                Stream remoteStream = response.GetResponseStream();
-                long fileSize = response.ContentLength;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                Debug.WriteLine("Response Length" + response.ContentLength);
+                long contentLength = response.ContentLength;
+                DateTime lastChange = response.LastModified;
 
-                StreamReader reader = new StreamReader(remoteStream, Encoding.UTF8);
+                // no changes
+                if (_dataService.CalendarLastDownload >= lastChange)
+                {
+                    return;
+                }
+
+                //
+                // Download the c
+                //
+
+                // We need to load the file
+                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server (Download)");
+                request = WebRequest.Create(url);
+                request.Proxy = null;
+
+                // get response
+                response = (HttpWebResponse)request.GetResponse();
+
+                // get stream for reading
+                ByteCountingStream remoteStream = new ByteCountingStream(response.GetResponseStream());
+
+                Encoding encoding = Encoding.UTF8;
+                StreamReader reader = new StreamReader(remoteStream, encoding);
 
                 // create parser
                 UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Setup default data");
                 FhvICalParser parser = new FhvICalParser();
                 parser.Prepare();
 
-                // load lines
+                // load data
                 UpdateProgress(
-                    fileSize == -1 ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal, 0,
+                    contentLength == -1 ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal, 0,
                     "Reload courses from event");
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (fileSize != -1)
-                        UpdateProgress(remoteStream.Position / (double)fileSize);
+                    if (contentLength != -1)
+                    {
+                        double percentage = remoteStream.ReadByteCount / (double)contentLength;
+                        if (percentage > 1)
+                        {
+                            UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Reload courses from event");
+                        }
+                        else
+                        {
+                            UpdateProgress(percentage);
+                        }
+                    }
                     parser.ProcessLine(line);
                 }
+
+                // update settings for next download
+                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Saving data to local storage");
+
+
+                #region Debug Code
 
                 StringBuilder builder = new StringBuilder();
 
@@ -239,10 +284,13 @@ namespace FhvRoomSearch.ViewModel
                                                                   DebugOutput = builder.ToString();
                                                               }));
 
+                #endregion
+
             }
             catch (Exception e)
             {
                 DownloadError(e.Message);
+                Debug.Fail(e.Message, e.ToString());
             }
             finally
             {

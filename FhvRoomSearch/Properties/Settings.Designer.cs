@@ -34,5 +34,29 @@ namespace FhvRoomSearch.Properties {
                 this["CalendarUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public long CalendarFileSize {
+            get {
+                return ((long)(this["CalendarFileSize"]));
+            }
+            set {
+                this["CalendarFileSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2011-11-08")]
+        public global::System.DateTime CalendarLastDownload {
+            get {
+                return ((global::System.DateTime)(this["CalendarLastDownload"]));
+            }
+            set {
+                this["CalendarLastDownload"] = value;
+            }
+        }
     }
 }
