@@ -14,7 +14,12 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Command="{Binding ReloadCoursesCommand}">Dump</Button>
+        <Menu>
+            <MenuItem Header="Calendar">
+                <MenuItem Header="Refresh Calendar Data" Command="{Binding ReloadCoursesCommand}" />
+                <MenuItem Header="Update Calendar URL" Command="{Binding UpdateUrlCommand}" />
+            </MenuItem>
+        </Menu>
         <TextBox Grid.Row="1" Text="{Binding DebugData}"></TextBox>
     </Grid>
 </Window>

@@ -41,6 +41,12 @@ namespace FhvRoomSearch.ViewModel
             private set;
         }
 
+        public ICommand UpdateUrlCommand
+        {
+            get;
+            private set;
+        }
+
         #region Debug Output
 
         private string _debugData;
@@ -65,6 +71,7 @@ namespace FhvRoomSearch.ViewModel
         {
             _dataService = dataService;
             ReloadCoursesCommand = new RelayCommand(ReloadCourses);
+            UpdateUrlCommand = new RelayCommand(RequestNewCalendarUrl);
         }
 
         public void ReloadCourses()
@@ -131,6 +138,11 @@ namespace FhvRoomSearch.ViewModel
 
                                            ), "error");
             }
+        }
+
+        private void RequestNewCalendarUrl()
+        {
+            RequestNewCalendarUrl(true);
         }
 
         private void RequestNewCalendarUrl(bool reloadCourses)
