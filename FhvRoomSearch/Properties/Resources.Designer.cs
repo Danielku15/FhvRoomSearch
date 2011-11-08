@@ -64,10 +64,10 @@ namespace FhvRoomSearch.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;!--
         ///--&gt;
-        ///&lt;DefaultData&gt;
+        ///&lt;ArrayOfWing&gt;
         ///  &lt;Wing Name=&quot;A&quot;&gt;
         ///    &lt;Level Name=&quot;A0&quot;&gt;
-        ///      &lt;Room RoomId=&quot;A001&quot; RoomName=&quot;Veranstaltungssaal&quot; Tables=&quot;0&quot; Chairs=&quot;178&quot; Computers=&quot;0&quot; Extras=&quot;Projector, Speaker, Microphone, SilverScreen&quot; ChairType=&quot;Cinema&quot; /&gt;
+        ///      &lt;Room RoomId=&quot;Aula&quot; RoomName=&quot;Veranstaltungssaal&quot; Tables=&quot;0&quot; Chairs=&quot;178&quot; Computers=&quot;0&quot; Extras=&quot;Projector, Speaker, Microphone, SilverScreen&quot; ChairType=&quot;Cinema&quot; /&gt;
         ///    &lt;/Level&gt;
         ///  &lt;/Wing&gt;
         ///  &lt;Wing Name=&quot;B&quot;&gt;

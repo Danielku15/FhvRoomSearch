@@ -4,13 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="RoomCourseModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="RoomCourseModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
   <EntityContainer Name="RoomCourseModelStoreContainer">
-    <EntitySet Name="RoomSet" EntityType="RoomCourseModel.Store.RoomSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="LevelSet" EntityType="RoomCourseModel.Store.LevelSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="WingSet" EntityType="RoomCourseModel.Store.WingSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="CourseSet" EntityType="RoomCourseModel.Store.CourseSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="RoomCourse" EntityType="RoomCourseModel.Store.RoomCourse" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RoomSet" EntityType="RoomCourseModel.Store.RoomSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="LevelSet" EntityType="RoomCourseModel.Store.LevelSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="WingSet" EntityType="RoomCourseModel.Store.WingSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="CourseSet" EntityType="RoomCourseModel.Store.CourseSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="RoomCourse" EntityType="RoomCourseModel.Store.RoomCourse" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <AssociationSet Name="LevelRoom" Association="RoomCourseModel.Store.LevelRoom">
       <End Role="Level" EntitySet="LevelSet" />
       <End Role="Room" EntitySet="RoomSet" />
@@ -129,8 +129,8 @@
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="RoomCourseModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-        <EntityContainer Name="RoomCourseModelContainer" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="RoomCourseModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="RoomCourseModelContainer" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="RoomSet" EntityType="RoomCourseModel.Room" />
           <EntitySet Name="LevelSet" EntityType="RoomCourseModel.Level" />
           <AssociationSet Name="LevelRoom" Association="RoomCourseModel.LevelRoom">
@@ -152,7 +152,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="RoomId" Nullable="false" />
           <Property Type="String" Name="RoomName" Nullable="false" />
           <Property Type="Int32" Name="Tables" Nullable="false" />
@@ -167,7 +167,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" />
           <NavigationProperty Name="Room" Relationship="RoomCourseModel.LevelRoom" FromRole="Level" ToRole="Room" />
           <NavigationProperty Name="Wing" Relationship="RoomCourseModel.WingLevel" FromRole="Level" ToRole="Wing" />
@@ -180,7 +180,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Name" Nullable="false" />
           <NavigationProperty Name="Level" Relationship="RoomCourseModel.WingLevel" FromRole="Wing" ToRole="Level" />
         </EntityType>
@@ -192,7 +192,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <NavigationProperty Name="Rooms" Relationship="RoomCourseModel.RoomCourse" FromRole="Course" ToRole="Room" />
           <Property Type="DateTime" Name="StartTime" Nullable="false" />
           <Property Type="DateTime" Name="EndTime" Nullable="false" />
@@ -284,21 +284,21 @@
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <edmx:Designer>
     <edmx:Connection>
-      <DesignerInfoPropertySet>
+      <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
         <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
       </DesignerInfoPropertySet>
     </edmx:Connection>
     <edmx:Options>
-      <DesignerInfoPropertySet>
+      <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram Name="RoomCourseModel" >
+      <Diagram Name="RoomCourseModel" xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
         <EntityTypeShape EntityType="RoomCourseModel.Room" Width="1.5" PointX="5" PointY="2" Height="2.7494921874999996" />
         <EntityTypeShape EntityType="RoomCourseModel.Level" Width="1.5" PointX="2.875" PointY="2" Height="1.7879850260416661" />
         <AssociationConnector Association="RoomCourseModel.LevelRoom">
