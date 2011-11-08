@@ -1,0 +1,38 @@
+﻿<Window x:Class="FhvRoomSearch.CalendarUrlDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ui="clr-namespace:FhvRoomSearch.Controls"
+        WindowStyle="ToolWindow"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Title="FHV Calendar Url" FocusManager.FocusedElement="{Binding ElementName=calendarUrlTextbox}" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" SizeToContent="Height" Width="644">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
+        <TextBlock TextWrapping="Wrap" Margin="5" Grid.ColumnSpan="3">
+            <Bold FontSize="14">How to get the url</Bold><LineBreak />
+            The FHV Room Searcher needs a special calendar file which is provided by the 
+            FHV timetable service accessible via <LineBreak />
+            <Hyperlink NavigateUri="http://timetable.fhv.at" RequestNavigate="OnHyperlinkRequestNavigate">http://timetable.fhv.at</Hyperlink><LineBreak />
+            <TextBlock Margin="10,5,0,0">
+              1. Open the <Bold>Standard Timetables</Bold><LineBreak />
+              2. Select the current semester and as resource <Bold>All</Bold><LineBreak ></LineBreak>
+              3. Copy the <Bold>Subscribe to ICS</Bold> url shown in the <Bold>Access the timetable</Bold> section and paste it here. 
+            </TextBlock>            
+        </TextBlock>
+        
+        <Label Grid.Row="1" FontWeight="Bold">Calendar URL</Label>
+        <Border Grid.Row="1" Grid.Column="1">
+            <ui:PlaceHolderTextBox x:Name="calendarUrlTextbox" PlaceHolderText="http://"></ui:PlaceHolderTextBox>
+        </Border>
+        <Button Grid.Row="1" Grid.Column="3" Margin="3" IsDefault="True" Click="OnSaveClick">Save</Button>
+    </Grid>
+</Window>

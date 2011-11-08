@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using FhvRoomSearch.Behavior;
 using FhvRoomSearch.Import;
 using FhvRoomSearch.Model;
 using GalaSoft.MvvmLight;
@@ -78,7 +79,7 @@ namespace FhvRoomSearch.ViewModel
                 WebClient client = new WebClient();
                 Stream calendarStream = client.OpenRead(url);
 
-                if(calendarStream == null)
+                if (calendarStream == null)
                 {
                     throw new IOException("Could not open connection to server");
                 }
@@ -110,6 +111,7 @@ namespace FhvRoomSearch.ViewModel
                     }
                 }
 
+
                 DebugData = builder.ToString();
 
             }
@@ -123,12 +125,27 @@ namespace FhvRoomSearch.ViewModel
                                            {
                                                if (res == MessageBoxResult.Yes)
                                                {
-                                                   // TODO: show calendar url dialog
+                                                   RequestNewCalendarUrl(true);
                                                }
                                            }
 
                                            ), "error");
             }
+        }
+
+        private void RequestNewCalendarUrl(bool reloadCourses)
+        {
+            Messenger.Default.Send(new CalendarUrlMessage(
+                                       _dataService.CalendarUrl,
+                                       newUrl =>
+                                           {
+                                               _dataService.CalendarUrl = newUrl;
+                                               if(reloadCourses)
+                                               {
+                                                   ReloadCourses(newUrl);                                                   
+                                               }
+                                           }
+                                       ),"calendar");
         }
     }
 }

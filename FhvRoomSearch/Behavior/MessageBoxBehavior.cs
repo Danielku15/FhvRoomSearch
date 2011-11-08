@@ -11,7 +11,6 @@ namespace FhvRoomSearch.Behavior
         protected override void OnAttached()
         {
             base.OnAttached();
-
             _messenger.Register<DialogMessage>(this, Identifier, ShowDialog);
         }
 
@@ -40,7 +39,8 @@ namespace FhvRoomSearch.Behavior
         {
             string caption = dm.Caption ?? Caption;
             string text = dm.Content ?? Text;
-            var result = MessageBox.Show(text, caption, Buttons);
+
+            MessageBoxResult result = MessageBox.Show(Application.Current.MainWindow, text, caption, Buttons);
             dm.Callback(result);
         }
 

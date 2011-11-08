@@ -107,7 +107,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behavior\CalendarUrlBehavior.cs" />
+    <Compile Include="Behavior\CalendarUrlMessage.cs" />
     <Compile Include="Behavior\MessageBoxBehavior.cs" />
+    <Compile Include="CalendarUrlDialog.xaml.cs">
+      <DependentUpon>CalendarUrlDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlaceHolderTextBox.cs" />
+    <Compile Include="Controls\TextAdorner.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Design\DesignDataService.cs" />
@@ -120,7 +127,6 @@
     <Compile Include="RoomConverterWindow.xaml.cs">
       <DependentUpon>RoomConverterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Model\RoomCourseModel.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -199,6 +205,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CalendarUrlDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -2,10 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        WindowStartupLocation="CenterScreen"
         xmlns:bh="clr-namespace:FhvRoomSearch.Behavior" Title="MainWindow" Height="387" Width="673"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Behaviors>
         <bh:MessageBoxBehavior Caption="An error occurred" Text="An unknown error occurred" Buttons="YesNo" Identifier="error"  />
+        <bh:CalendarUrlBehavior Identifier="calendar" />
     </i:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
