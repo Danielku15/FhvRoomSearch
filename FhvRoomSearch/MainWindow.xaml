@@ -3,8 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         WindowStartupLocation="CenterScreen"
-        xmlns:bh="clr-namespace:FhvRoomSearch.Behavior" Title="MainWindow" Height="387" Width="673"
+        xmlns:bh="clr-namespace:FhvRoomSearch.Behavior" xmlns:cv="clr-namespace:FhvRoomSearch.Converter"
+        Title="MainWindow" Height="387" Width="673"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <cv:ProgressStateVisibilityConverter x:Key="progressVisibilityConverter" />
+        <cv:DoubleToIntPercentageConverter x:Key="doubleToIntPercentageConverter" />
+        <cv:ProgressStateIndeterminateBoolConverter x:Key="ProgressStateIndeterminateBoolConverter" />
+    </Window.Resources>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="{Binding ProgressState}" ProgressValue="{Binding ProgressValue}" />
+    </Window.TaskbarItemInfo>
     <i:Interaction.Behaviors>
         <bh:MessageBoxBehavior Caption="An error occurred" Text="An unknown error occurred" Buttons="YesNo" Identifier="error"  />
         <bh:CalendarUrlBehavior Identifier="calendar" />
@@ -13,6 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Menu>
             <MenuItem Header="Calendar">
@@ -20,6 +30,13 @@
                 <MenuItem Header="Update Calendar URL" Command="{Binding UpdateUrlCommand}" />
             </MenuItem>
         </Menu>
-        <TextBox Grid.Row="1" Text="{Binding DebugData}"></TextBox>
+        <TextBox Grid.Row="1" Text="{Binding DebugOutput}"></TextBox>
+        <StatusBar Grid.Row="2">
+            <Label Content="{Binding ProgressStatus}" />
+            <ProgressBar Width="120" Height="18" Minimum="0" Maximum="100"
+                         Value="{Binding ProgressValue, Converter={StaticResource doubleToIntPercentageConverter}}"
+                         IsIndeterminate="{Binding ProgressState, Converter={StaticResource ProgressStateIndeterminateBoolConverter}}"
+                         Visibility="{Binding ProgressState, Converter={StaticResource progressVisibilityConverter}}"></ProgressBar>
+        </StatusBar>
     </Grid>
 </Window>

@@ -2,14 +2,18 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Shell;
 using FhvRoomSearch.Behavior;
 using FhvRoomSearch.Import;
 using FhvRoomSearch.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
+using System.Diagnostics;
 
 namespace FhvRoomSearch.ViewModel
 {
@@ -17,23 +21,7 @@ namespace FhvRoomSearch.ViewModel
     {
         private readonly IDataService _dataService;
 
-        private string _lastError;
-        public string LastError
-        {
-            get
-            {
-                return _lastError;
-            }
-            set
-            {
-                if (_lastError == value)
-                    return;
-                _lastError = value;
-                RaisePropertyChanged("LastError");
-            }
-        }
-
-
+        #region Commands
 
         public ICommand ReloadCoursesCommand
         {
@@ -47,21 +35,78 @@ namespace FhvRoomSearch.ViewModel
             private set;
         }
 
-        #region Debug Output
+        #endregion
 
-        private string _debugData;
-        public string DebugData
+        #region Progress
+
+        private bool _isReloading;
+        private bool _showCalendarViewerAfterReload;
+
+        private double _progressValue;
+        public double ProgressValue
         {
             get
             {
-                return _debugData;
+                return _progressValue;
             }
             set
             {
-                if (_debugData == value)
+                if (_progressValue == value)
                     return;
-                _debugData = value;
-                RaisePropertyChanged("DebugData");
+                _progressValue = value;
+                RaisePropertyChanged("ProgressValue");
+            }
+        }
+
+        private TaskbarItemProgressState _progressState;
+        public TaskbarItemProgressState ProgressState
+        {
+            get
+            {
+                return _progressState;
+            }
+            set
+            {
+                if (_progressState == value)
+                    return;
+                _progressState = value;
+                RaisePropertyChanged("ProgressState");
+            }
+        }
+
+        private string _progressStatus;
+        public string ProgressStatus
+        {
+            get
+            {
+                return _progressStatus;
+            }
+            set
+            {
+                if (_progressStatus == value)
+                    return;
+                _progressStatus = value;
+                RaisePropertyChanged("ProgressStatus");
+            }
+        }
+
+        #endregion
+
+        #region Debug Props
+
+        private string _debugOutput;
+        public string DebugOutput
+        {
+            get
+            {
+                return _debugOutput;
+            }
+            set
+            {
+                if (_debugOutput == value)
+                    return;
+                _debugOutput = value;
+                RaisePropertyChanged("DebugOutput");
             }
         }
 
@@ -70,9 +115,14 @@ namespace FhvRoomSearch.ViewModel
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
+            ProgressState = TaskbarItemProgressState.None;
+            ProgressValue = 0;
+            ProgressStatus = "Ready";
             ReloadCoursesCommand = new RelayCommand(ReloadCourses);
             UpdateUrlCommand = new RelayCommand(RequestNewCalendarUrl);
         }
+
+        #region Course Reloading
 
         public void ReloadCourses()
         {
@@ -81,20 +131,85 @@ namespace FhvRoomSearch.ViewModel
 
         public void ReloadCourses(string url)
         {
+            lock (this)
+            {
+                if (_isReloading)
+                    return;
+                _isReloading = true;
+            }
+
+            Task.Factory.StartNew(() => DoReloadCourses(url)).ContinueWith(
+                t =>
+                {
+                    if (_showCalendarViewerAfterReload)
+                    {
+                        RequestNewCalendarUrl(true);
+                    }
+                }, TaskContinuationOptions.ExecuteSynchronously);
+
+
+            _isReloading = false;
+        }
+
+        private void UpdateProgress(TaskbarItemProgressState state, double value, string status)
+        {
+            if (!DispatcherHelper.UIDispatcher.CheckAccess())
+            {
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action<TaskbarItemProgressState, double, string>(UpdateProgress), state, value, status);
+                return;
+            }
+
+            ProgressState = state;
+            ProgressValue = value;
+            ProgressStatus = status;
+        }
+
+        private void UpdateProgress(double value)
+        {
+            if (!DispatcherHelper.UIDispatcher.CheckAccess())
+            {
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action<double>(UpdateProgress), value);
+                return;
+            }
+
+            ProgressValue = value;
+        }
+
+        private void DoReloadCourses(string url)
+        {
             try
             {
-                WebClient client = new WebClient();
-                Stream calendarStream = client.OpenRead(url);
+                _showCalendarViewerAfterReload = false;
+                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server");
 
-                if (calendarStream == null)
+                // make HTTP request
+                WebRequest request = WebRequest.Create(url);
+                request.Proxy = null;
+
+                // get response
+                WebResponse response = request.GetResponse();
+                Stream remoteStream = response.GetResponseStream();
+                long fileSize = response.ContentLength;
+
+                Debug.WriteLine("Response Length" + response.ContentLength);
+
+                StreamReader reader = new StreamReader(remoteStream, Encoding.UTF8);
+
+                // create parser
+                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Setup default data");
+                FhvICalParser parser = new FhvICalParser();
+                parser.Prepare();
+
+                // load lines
+                UpdateProgress(
+                    fileSize == -1 ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal, 0,
+                    "Reload courses from event");
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    throw new IOException("Could not open connection to server");
-                }
-                FhvICalParser parser;
-                using (StreamReader reader = new StreamReader(calendarStream, Encoding.UTF8))
-                {
-                    parser = new FhvICalParser(reader);
-                    parser.Parse();
+                    if (fileSize != -1)
+                        UpdateProgress(remoteStream.Position / (double)fileSize);
+                    parser.ProcessLine(line);
                 }
 
                 StringBuilder builder = new StringBuilder();
@@ -118,27 +233,50 @@ namespace FhvRoomSearch.ViewModel
                     }
                 }
 
-
-                DebugData = builder.ToString();
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(
+                                                              () =>
+                                                              {
+                                                                  DebugOutput = builder.ToString();
+                                                              }));
 
             }
             catch (Exception e)
             {
-                Messenger.Default.Send(new DialogMessage(
-                                           "Could not load calender from current URL: '" + e.Message + "'" +
-                                           Environment.NewLine +
-                                           "Do you want to specify a new calendar URL?",
-                                           res =>
-                                           {
-                                               if (res == MessageBoxResult.Yes)
-                                               {
-                                                   RequestNewCalendarUrl(true);
-                                               }
-                                           }
-
-                                           ), "error");
+                DownloadError(e.Message);
+            }
+            finally
+            {
+                UpdateProgress(TaskbarItemProgressState.None, 0, "Ready");
             }
         }
+
+        private void DownloadError(string message)
+        {
+            if (!DispatcherHelper.UIDispatcher.CheckAccess())
+            {
+                DispatcherHelper.UIDispatcher.BeginInvoke(new Action<String>(DownloadError), message);
+                return;
+            }
+
+            Messenger.Default.Send(new DialogMessage(
+                                      "Could not load calender from current URL: '" + message + "'" +
+                                      Environment.NewLine +
+                                      "Do you want to specify a new calendar URL?",
+                                      res =>
+                                      {
+                                          if (res == MessageBoxResult.Yes)
+                                          {
+                                              _showCalendarViewerAfterReload = true;
+                                              RequestNewCalendarUrl(true);
+                                          }
+                                      }
+
+                                      ), "error");
+        }
+
+        #endregion
+
+        #region Calendar URL
 
         private void RequestNewCalendarUrl()
         {
@@ -150,14 +288,16 @@ namespace FhvRoomSearch.ViewModel
             Messenger.Default.Send(new CalendarUrlMessage(
                                        _dataService.CalendarUrl,
                                        newUrl =>
+                                       {
+                                           _dataService.CalendarUrl = newUrl;
+                                           if (reloadCourses)
                                            {
-                                               _dataService.CalendarUrl = newUrl;
-                                               if(reloadCourses)
-                                               {
-                                                   ReloadCourses(newUrl);                                                   
-                                               }
+                                               ReloadCourses(newUrl);
                                            }
-                                       ),"calendar");
+                                       }
+                                       ), "calendar");
         }
+        #endregion
+
     }
 }

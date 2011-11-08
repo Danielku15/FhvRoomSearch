@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml;
-using System.Xml.Serialization;
 using FhvRoomSearch.Model;
 using FhvRoomSearch.Properties;
 
@@ -14,8 +13,13 @@ namespace FhvRoomSearch.Import
     /// </summary>
     class FhvICalParser
     {
-        private readonly StreamReader _calendar;
         private Dictionary<string, Room> _rooms;
+
+        private State _state;
+        private string _dtStart;
+        private string _dtEnd;
+        private string _summary;
+        private string _location;
 
         public IList<Wing> ParsedData
         {
@@ -23,20 +27,11 @@ namespace FhvRoomSearch.Import
             private set;
         }
 
-        public FhvICalParser(StreamReader calendar)
-        {
-            if (calendar == null)
-            {
-                throw new ArgumentNullException("calendar");
-            }
-            _calendar = calendar;
-        }
-
-        public void Parse()
+        public void Prepare()
         {
             ParsedData = new List<Wing>();
             SetupDefaultStructure();
-            ReadCourses();
+            _state = State.OutsideEvent;
         }
 
         private void SetupDefaultStructure()
@@ -44,8 +39,6 @@ namespace FhvRoomSearch.Import
             try
             {
                 _rooms = new Dictionary<string, Room>();
-
-                // TODO: Create own serializer, this one does not work
 
                 XmlDocument document = new XmlDocument();
                 document.LoadXml(Resources.DefaultWingData);
@@ -72,53 +65,54 @@ namespace FhvRoomSearch.Import
             }
         }
 
-        private void ReadCourses()
+        public void ProcessLine(string line)
         {
-            string currentLine;
-
-            while ((currentLine = _calendar.ReadLine()) != null)
+            // transitions
+            if (line == "BEGIN:VEVENT")
             {
-                if (currentLine.Trim() == "BEGIN:VEVENT")
+                _state = State.InsideEvent;
+            }
+            else if (line == "END:VEVENT")
+            {
+                _state = State.OutsideEvent;
+                FinishEvent();
+            }
+            else
+            {
+                // computations
+                switch (_state)
                 {
-                    ReadCourse();
+                    case State.InsideEvent:
+                        ProcessEventLine(line);
+                        break;
                 }
             }
         }
 
-        private void ReadCourse()
+
+        private void ProcessEventLine(string line)
         {
-            string dtStart = null;
-            string dtEnd = null;
-            string summary = null;
-            string location = null;
-
-            string currentLine;
-            while ((currentLine = _calendar.ReadLine()) != null)
+            if (line.StartsWith("DTSTART;TZID=Europe/Vienna"))
             {
-                if (currentLine == "END:VEVENT")
-                {
-                    break;
-                }
-
-                if (currentLine.StartsWith("DTSTART;TZID=Europe/Vienna"))
-                {
-                    dtStart = currentLine.Substring(28);
-                }
-                else if (currentLine.StartsWith("DTEND;TZID=Europe/Vienna:"))
-                {
-                    dtEnd = currentLine.Substring(26);
-                }
-                else if (currentLine.StartsWith("SUMMARY:"))
-                {
-                    summary = currentLine.Substring(8);
-                }
-                else if (currentLine.StartsWith("LOCATION:"))
-                {
-                    location = currentLine.Substring(9);
-                }
+                _dtStart = line.Substring(28);
             }
+            else if (line.StartsWith("DTEND;TZID=Europe/Vienna:"))
+            {
+                _dtEnd = line.Substring(26);
+            }
+            else if (line.StartsWith("SUMMARY:"))
+            {
+                _summary = line.Substring(8);
+            }
+            else if (line.StartsWith("LOCATION:"))
+            {
+                _location = line.Substring(9);
+            }
+        }
 
-            if (dtStart == null || dtEnd == null || summary == null || location == null)
+        private void FinishEvent()
+        {
+            if (_dtStart == null || _dtEnd == null || _summary == null || _location == null)
             {
                 // TODO: Do some error reporting here
                 return;
@@ -126,12 +120,12 @@ namespace FhvRoomSearch.Import
 
             Course course = new Course
             {
-                StartTime = DecodeDateTime(dtStart),
-                EndTime = DecodeDateTime(dtEnd)
+                StartTime = DecodeDateTime(_dtStart),
+                EndTime = DecodeDateTime(_dtEnd)
             };
-            ParseSummary(course, summary);
+            ParseSummary(course, _summary);
 
-            AddToRooms(course, location);
+            AddToRooms(course, _location);
         }
 
         private void AddToRooms(Course course, string location)
@@ -206,6 +200,20 @@ namespace FhvRoomSearch.Import
                     course.Notes = line.Substring(9);
                 }
             }
+        }
+
+        public event ProgressChangedEventHandler ProgressChanged;
+        protected virtual void OnProgressChanged(ProgressChangedEventArgs e)
+        {
+            ProgressChangedEventHandler handler = ProgressChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        private enum State
+        {
+            OutsideEvent,
+            InsideEvent
         }
     }
 }

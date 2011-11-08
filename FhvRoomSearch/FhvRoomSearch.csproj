@@ -119,6 +119,9 @@
     </Compile>
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Controls\TextAdorner.cs" />
+    <Compile Include="Converter\DoubleToIntPercentageConverter.cs" />
+    <Compile Include="Converter\ProgressStateIndeterminateBoolConverter.cs" />
+    <Compile Include="Converter\ProgressStateVisibilityConverter.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Design\DesignDataService.cs" />
