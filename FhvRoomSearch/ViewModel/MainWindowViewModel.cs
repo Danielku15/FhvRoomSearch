@@ -64,6 +64,30 @@ namespace FhvRoomSearch.ViewModel
                             parser.Parse();
 
                             var data = parser.ParsedData;
+
+                            StringBuilder builder = new StringBuilder();
+
+                            foreach (var wing in parser.ParsedData)
+                            {
+                                builder.AppendLine(wing.Name);
+                                foreach (var level in wing.Level)
+                                {
+                                    builder.AppendLine("    " + level.Name);
+
+                                    foreach (var room in level.Room)
+                                    {
+                                        builder.AppendLine("        " + room.RoomId);
+
+                                        foreach (var course in room.Course)
+                                        {
+                                            builder.AppendLine(string.Format("            {0}({1} - {2})", course.Module, course.StartTime, course.EndTime));
+                                        }
+                                    }
+                                }
+                                
+                            }
+
+                            SerializedModel = builder.ToString();
                         }
                     }
                     catch (ImportException)

@@ -1,68 +1,157 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<DefaultData>
+<!--
+-->
+<ArrayOfWing>
   <Wing Name="A">
     <Level Name="A0">
-      <Room RoomId="A001" RoomName="Veranstaltungssaal (Aula)" Tables="0" Chairs="178" Computers="0" ExtrasValue="" ChairTypeValue="" />
+      <Room RoomId="Aula" RoomName="Veranstaltungssaal" Tables="0" Chairs="178" Computers="0" Extras="Projector, Speaker, Microphone, SilverScreen" ChairType="Cinema" />
     </Level>
   </Wing>
   <Wing Name="B">
-    <Level Name="B0">
-    </Level>
+    <Level Name="B0" />
     <Level Name="B1">
+      <Room RoomId="B102 (PBL)" RoomName="PBL" Tables="0" Chairs="28" Computers="0" Extras="Blackboard, Projector, Speaker, Overhead" ChairType="NormalClass" />
+      <Room RoomId="B103 (PBL)" RoomName="PBL" Tables="0" Chairs="18" Computers="0" Extras="Projector, Speaker" ChairType="NormalClass" />
+      <Room RoomId="B104" RoomName="Seminarraum" Tables="0" Chairs="26" Computers="0" Extras="Overhead" ChairType="NormalClass" />
+      <Room RoomId="B105" RoomName="Hörsaal" Tables="0" Chairs="48" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
     </Level>
     <Level Name="B2">
+      <Room RoomId="B202" RoomName="Seminarraum" Tables="0" Chairs="32" Computers="0" Extras="Blackboard, Overhead" ChairType="NormalClass" />
+      <Room RoomId="B203" RoomName="Seminarraum" Tables="0" Chairs="14" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="B204" RoomName="Seminarraum" Tables="0" Chairs="18" Computers="0" Extras="Overhead" ChairType="NormalClass" />
+      <Room RoomId="B205" RoomName="Hörsaal" Tables="0" Chairs="51" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
     </Level>
     <Level Name="B3">
+      <Room RoomId="B302" RoomName="Seminarraum" Tables="0" Chairs="32" Computers="0" Extras="Blackboard, Overhead" ChairType="NormalClass" />
+      <Room RoomId="B303 Trainingszentrum Wirtschaft" RoomName="Trainingszentrum Wirtschaft" Tables="0" Chairs="15" Computers="0" Extras="Overhead" ChairType="NormalClass" />
+      <Room RoomId="B304 Trainingszentrum Wirtschaft" RoomName="Trainingszentrum Wirtschaft" Tables="0" Chairs="18" Computers="0" Extras="Overhead" ChairType="NormalClass" />
+      <Room RoomId="B305 Trainingszentrum Wirtschaft" RoomName="Trainingszentrum Wirtschaft" Tables="0" Chairs="0" Computers="0" Extras="Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
     </Level>
   </Wing>
   <Wing Name="C" />
   <Wing Name="D">
     <Level Name="D0">
+      <Room RoomId="D002 Mac-Pool" RoomName="Mac-Pool" Tables="0" Chairs="21" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="D003 Mac-Pool" RoomName="Mac-Pool" Tables="0" Chairs="21" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="D004 Jahrgangsatelier" RoomName="JahrgangsatelierMediengestaltung" Tables="0" Chairs="0" Computers="0" Extras="Projector" ChairType="NormalClass" />
+      <Room RoomId="D005 VR-lab" RoomName="Virtual Reality" Tables="0" Chairs="10" Computers="0" Extras="AccessControl" ChairType="NormalClass" />
+      <Room RoomId="D006 Videolab" RoomName="Videolab" Tables="0" Chairs="0" Computers="0" Extras="AccessControl" ChairType="NormalClass" />
+      <Room RoomId="D009 Fotostudio" RoomName="Fotostudio" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="D010 AV-lab" RoomName="AV-lab" Tables="0" Chairs="16" Computers="0" Extras="Projector, Speaker" ChairType="NormalClass" />
+      <Room RoomId="D011 Jahrgangsatelier" RoomName="JahrgangsatelierMediengestaltung" Tables="0" Chairs="0" Computers="0" Extras="Projector" ChairType="NormalClass" />
+      <Room RoomId="D012 Jahrgangsatelier" RoomName="JahrgangsatelierMediengestaltung" Tables="0" Chairs="0" Computers="0" Extras="Projector" ChairType="NormalClass" />
+      <Room RoomId="D113 (Schulungsraum Bib)" RoomName="AV-R&amp;D lab" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
     </Level>
   </Wing>
   <Wing Name="E">
     <Level Name="E0">
+      <Room RoomId="E002" RoomName="Interactive Media Lab" Tables="0" Chairs="0" Computers="0" Extras="AccessControl" ChairType="NormalClass" />
+      <Room RoomId="E005" RoomName="Hörsaal" Tables="0" Chairs="42" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen" ChairType="NormalClass" />
+      <Room RoomId="E006" RoomName="Hörsaal" Tables="0" Chairs="42" Computers="0" Extras="Blackboard, Projector, Speaker" ChairType="NormalClass" />
+      <Room RoomId="E009" RoomName="Seminarraum" Tables="0" Chairs="30" Computers="0" Extras="Blackboard" ChairType="NormalClass" />
+    </Level>
+    <Level Name="E2">
+      <Room RoomId="E211 Besprechung" RoomName="Besprechung" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
     </Level>
   </Wing>
   <Wing Name="F" />
   <Wing Name="S">
     <Level Name="S0">
+      <Room RoomId="S002 Kommunikationslabor" RoomName="Kommunikationslabor" Tables="0" Chairs="40" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="S011 Dialog Lab" RoomName="Kommunikationslabor" Tables="0" Chairs="30" Computers="0" Extras="Projector, Speaker" ChairType="NormalClass" />
+      <Room RoomId="S012 Kommunikationslabor" RoomName="Kommunikationslabor" Tables="0" Chairs="30" Computers="0" Extras="Projector, Speaker" ChairType="NormalClass" />
     </Level>
   </Wing>
   <Wing Name="U">
-    <Level Name="S0">
+    <Level Name="U0">
+      <Room RoomId="U017" RoomName="" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="U018" RoomName="" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
+      <Room RoomId="U019 Projektraum Technik" RoomName="" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
     </Level>
-    <Level Name="S1">
+    <Level Name="U1">
+      <Room RoomId="U130 eLab" RoomName="Elektroniklabor" Tables="0" Chairs="7" Computers="0" Extras="AccessControl" ChairType="NormalClass" />
+      <Room RoomId="U131 Embedded Systems Lab" RoomName="Embedded System Labor" Tables="0" Chairs="15" Computers="0" Extras="AccessControl, Projector" ChairType="NormalClass" />
     </Level>
-    <Level Name="S2">
+    <Level Name="U2">
+      <Room RoomId="U204" RoomName="Hörsaal" Tables="24" Chairs="49" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U205" RoomName="Hörsaal" Tables="24" Chairs="49" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U206" RoomName="Hörsaal" Tables="24" Chairs="49" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U207" RoomName="Hörsaal" Tables="24" Chairs="49" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U210 (SchlossHofen)" RoomName="Seminarraum groß" Tables="15" Chairs="31" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U212 (SchlossHofen)" RoomName="Seminarraumgroß" Tables="13" Chairs="27" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="UShape" />
+      <Room RoomId="U214" RoomName="Seminarraumklein" Tables="8" Chairs="15" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U215" RoomName="Seminarraumklein" Tables="8" Chairs="15" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U216" RoomName="Besprechungklein" Tables="9" Chairs="16" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="RectangleShape" />
+      <Room RoomId="U217 Projektraum" RoomName="Proj.-Raum" Tables="4" Chairs="10" Computers="0" Extras="SilverScreen, Overhead" ChairType="RectangleShape" />
+      <Room RoomId="U218 (Projektraum)" RoomName="ProjRaum" Tables="1" Chairs="8" Computers="0" Extras="SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U225" RoomName="Hörsaal" Tables="28" Chairs="57" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U226" RoomName="Hörsaal" Tables="28" Chairs="57" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U227" RoomName="Hörsaal" Tables="28" Chairs="57" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
     </Level>
-    <Level Name="S3">
+    <Level Name="U3">
+      <Room RoomId="U304" RoomName="Seminarraumgroß" Tables="14" Chairs="29" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U305" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U306" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U307" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U310" RoomName="Seminarraum groß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U311" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U312" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U313" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U314" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U315" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U325 Lab f. verteilte Systeme" RoomName="Labor für Verteilte Systeme" Tables="14" Chairs="26" Computers="6" Extras="AccessControl, Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U326 nw-lab" RoomName="Netzwerk Labor" Tables="14" Chairs="25" Computers="24" Extras="AccessControl, Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U327 db-lab" RoomName="Datenbank Labor" Tables="11" Chairs="27" Computers="23" Extras="AccessControl, Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U328 se-lab" RoomName="Software Engineering Lab" Tables="13" Chairs="23" Computers="6" Extras="AccessControl, Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U329 cad-Lab2" RoomName="CAD/CAM/CAE Labor" Tables="16" Chairs="22" Computers="19" Extras="AccessControl, Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U330" RoomName="Besprechunggroß" Tables="10" Chairs="23" Computers="0" Extras="AccessControl, Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="UShape" />
     </Level>
-    <Level Name="S4">
+    <Level Name="U4">
+      <Room RoomId="U404" RoomName="Seminarraum groß" Tables="14" Chairs="29" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U405" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U406" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U407" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U410" RoomName="Seminarraumgroß" Tables="16" Chairs="33" Computers="0" Extras="Blackboard, Projector, Speaker, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U411" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U412" RoomName="Seminarraum klein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U413" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U414" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U415" RoomName="Seminarraumklein" Tables="9" Chairs="18" Computers="0" Extras="Blackboard, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U416 Projektraum" RoomName="Proj.-Raum" Tables="2" Chairs="10" Computers="0" Extras="None" ChairType="RectangleShape" />
+      <Room RoomId="U426 pc-Pool" RoomName="Computerpool" Tables="12" Chairs="24" Computers="23" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U427 3D/CAD Lab" RoomName="3D/CAD Lab" Tables="12" Chairs="24" Computers="23" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U428 mac-Pool" RoomName="Mac-Pool" Tables="16" Chairs="33" Computers="16" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U429 pc-Pool" RoomName="Computerpool" Tables="15" Chairs="36" Computers="29" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="U430 pc-Pool" RoomName="Computerpool" Tables="15" Chairs="30" Computers="29" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
     </Level>
   </Wing>
   <Wing Name="V">
-    <Level Name="V0">
-    </Level>
-    <Level Name="V1">
-    </Level>
-    <Level Name="V2">
-    </Level>
-    <Level Name="V3">
-    </Level>
+    <Level Name="V0" />
+    <Level Name="V1" />
+    <Level Name="V2" />
+    <Level Name="V3" />
     <Level Name="V4">
+      <Room RoomId="V414 Besprechung" RoomName="Besprechung" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
     </Level>
   </Wing>
   <Wing Name="W">
     <Level Name="W0">
+      <Room RoomId="W001 cad/cam/cae-lab" RoomName="CAD/CAM/CAE-Labor" Tables="0" Chairs="15" Computers="0" Extras="AccessControl, Blackboard, Projector, Speaker" ChairType="NormalClass" />
+      <Room RoomId="W016 alab" RoomName="Automatisierungslabor" Tables="0" Chairs="16" Computers="0" Extras="AccessControl" ChairType="NormalClass" />
+      <Room RoomId="W017 mlab" RoomName="Fertigungslabor" Tables="0" Chairs="17" Computers="0" Extras="AccessControl, Projector, Speaker" ChairType="NormalClass" />
+      <Room RoomId="W023 Besprechung" RoomName="Besprechung" Tables="0" Chairs="0" Computers="0" Extras="None" ChairType="NormalClass" />
     </Level>
     <Level Name="W1">
+      <Room RoomId="U130" RoomName="Elektroniklabor" Tables="0" Chairs="7" Computers="0" Extras="AccessControl" ChairType="NormalClass" />
+      <Room RoomId="U131" RoomName="Embedded System Labor" Tables="0" Chairs="15" Computers="0" Extras="AccessControl, Projector" ChairType="NormalClass" />
     </Level>
     <Level Name="W2">
+      <Room RoomId="W205 (mit Gefaelle)" RoomName="Hörsaal (mit Gefälle)" Tables="0" Chairs="78" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="Cinema" />
+      <Room RoomId="W206 (mit Gefaelle)" RoomName="Hörsaal (mit Gefälle)" Tables="0" Chairs="70" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="Cinema" />
+      <Room RoomId="W207/08" RoomName="Hörsaal" Tables="56" Chairs="114" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
+      <Room RoomId="W211/12 (mit Gefaelle)" RoomName="Hörsaal (mit Gefälle)" Tables="0" Chairs="142" Computers="0" Extras="Blackboard, Projector, Speaker, Microphone, SilverScreen, Overhead" ChairType="NormalClass" />
     </Level>
-    <Level Name="W3">
-    </Level>
-    <Level Name="W4">
-    </Level>
+    <Level Name="W3" />
+    <Level Name="W4" />
   </Wing>
-</DefaultData>
+</ArrayOfWing>

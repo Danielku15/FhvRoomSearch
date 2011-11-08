@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Serialization;
 using FhvRoomSearch.Model;
 using FhvRoomSearch.Properties;
@@ -45,9 +46,13 @@ namespace FhvRoomSearch.Import
                 _rooms = new Dictionary<string, Room>();
 
                 // TODO: Create own serializer, this one does not work
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Wing>));
-                StringReader reader = new StringReader(Resources.DefaultWingData);
-                ParsedData = (IList<Wing>)serializer.Deserialize(reader);
+
+                XmlDocument document = new XmlDocument();
+                document.LoadXml(Resources.DefaultWingData);
+
+                WingSerializer serializer = new WingSerializer(document);
+                serializer.Deserialize();
+                ParsedData = serializer.Wings;
 
                 foreach (Wing wing in ParsedData)
                 {
@@ -90,36 +95,40 @@ namespace FhvRoomSearch.Import
             string currentLine;
             while ((currentLine = _calendar.ReadLine()) != null)
             {
-                if(currentLine == "END:VEVENT")
+                if (currentLine == "END:VEVENT")
                 {
                     break;
                 }
 
-                if(currentLine.StartsWith("DTSTART;TZID=Europe/Vienna"))
+                if (currentLine.StartsWith("DTSTART;TZID=Europe/Vienna"))
                 {
-                    dtStart = currentLine.Substring(28); 
+                    dtStart = currentLine.Substring(28);
                 }
-                else if(currentLine.StartsWith("DTEND;TZID=Europe/Vienna:"))
+                else if (currentLine.StartsWith("DTEND;TZID=Europe/Vienna:"))
                 {
                     dtEnd = currentLine.Substring(26);
                 }
-                else if(currentLine.StartsWith("SUMMARY:"))
+                else if (currentLine.StartsWith("SUMMARY:"))
                 {
                     summary = currentLine.Substring(8);
                 }
-                else if(currentLine.StartsWith("LOCATION:"))
+                else if (currentLine.StartsWith("LOCATION:"))
                 {
                     location = currentLine.Substring(9);
                 }
             }
 
-            if(dtStart == null || dtEnd == null || summary == null || location == null)
+            if (dtStart == null || dtEnd == null || summary == null || location == null)
             {
                 // TODO: Do some error reporting here
                 return;
             }
 
-            Course course = new Course {StartTime = DecodeDateTime(dtStart), EndTime = DecodeDateTime(dtEnd)};
+            Course course = new Course
+            {
+                StartTime = DecodeDateTime(dtStart),
+                EndTime = DecodeDateTime(dtEnd)
+            };
             ParseSummary(course, summary);
 
             AddToRooms(course, location);
@@ -130,7 +139,7 @@ namespace FhvRoomSearch.Import
             // TODO: Better checking
             foreach (KeyValuePair<string, Room> c in _rooms)
             {
-                if(location.Contains(c.Key))
+                if (location.Contains(c.Key))
                 {
                     c.Value.Course.Add(course);
                 }
@@ -173,21 +182,21 @@ namespace FhvRoomSearch.Import
 
         private void ParseSummary(Course course, string summary)
         {
-            string[] lines = summary.Replace("\\,", ",").Split(new[] {"\\n"}, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = summary.Replace("\\,", ",").Split(new[] { "\\n" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string line in lines)
             {
-                if(line.StartsWith("Kategorie: "))
+                if (line.StartsWith("Kategorie: "))
                 {
                     course.Category = line.Substring(11);
                 }
-                else if(line.StartsWith("Modul: "))
+                else if (line.StartsWith("Modul: "))
                 {
                     course.Module = line.Substring(7);
                 }
                 else if (line.StartsWith("DozentIn: "))
                 {
                     course.Lecturer = line.Substring(10);
-                }               
+                }
                 else if (line.StartsWith("Gruppe: "))
                 {
                     course.Lecturer = line.Substring(8);
