@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server Compact Edition
 -- --------------------------------------------------
--- Date Created: 11/08/2011 00:49:07
+-- Date Created: 11/09/2011 19:13:09
 -- Generated from EDMX file: D:\Dev\C#\Projects\FhvRoomSearch\FhvRoomSearch\Model\RoomCourseModel.edmx
 -- --------------------------------------------------
 
@@ -134,7 +134,7 @@ ADD CONSTRAINT [FK_LevelRoom]
     FOREIGN KEY ([Level_Id])
     REFERENCES [LevelSet]
         ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_LevelRoom'
 CREATE INDEX [IX_FK_LevelRoom]
@@ -148,7 +148,7 @@ ADD CONSTRAINT [FK_WingLevel]
     FOREIGN KEY ([Wing_Id])
     REFERENCES [WingSet]
         ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
+    ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_WingLevel'
 CREATE INDEX [IX_FK_WingLevel]

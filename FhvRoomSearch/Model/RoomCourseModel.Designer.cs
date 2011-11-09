@@ -195,22 +195,12 @@ namespace FhvRoomSearch.Model
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="startTime">Initial value of the StartTime property.</param>
         /// <param name="endTime">Initial value of the EndTime property.</param>
-        /// <param name="category">Initial value of the Category property.</param>
-        /// <param name="notes">Initial value of the Notes property.</param>
-        /// <param name="module">Initial value of the Module property.</param>
-        /// <param name="lecturer">Initial value of the Lecturer property.</param>
-        /// <param name="group">Initial value of the Group property.</param>
-        public static Course CreateCourse(global::System.Int32 id, global::System.DateTime startTime, global::System.DateTime endTime, global::System.String category, global::System.String notes, global::System.String module, global::System.String lecturer, global::System.String group)
+        public static Course CreateCourse(global::System.Int32 id, global::System.DateTime startTime, global::System.DateTime endTime)
         {
             Course course = new Course();
             course.Id = id;
             course.StartTime = startTime;
             course.EndTime = endTime;
-            course.Category = category;
-            course.Notes = notes;
-            course.Module = module;
-            course.Lecturer = lecturer;
-            course.Group = group;
             return course;
         }
 
@@ -312,7 +302,7 @@ namespace FhvRoomSearch.Model
                 OnCategoryChanged();
             }
         }
-        private global::System.String _Category;
+        private global::System.String _Category = "";
         partial void OnCategoryChanging(global::System.String value);
         partial void OnCategoryChanged();
     
@@ -336,7 +326,7 @@ namespace FhvRoomSearch.Model
                 OnNotesChanged();
             }
         }
-        private global::System.String _Notes;
+        private global::System.String _Notes = "";
         partial void OnNotesChanging(global::System.String value);
         partial void OnNotesChanged();
     
@@ -360,7 +350,7 @@ namespace FhvRoomSearch.Model
                 OnModuleChanged();
             }
         }
-        private global::System.String _Module;
+        private global::System.String _Module = "";
         partial void OnModuleChanging(global::System.String value);
         partial void OnModuleChanged();
     
@@ -384,7 +374,7 @@ namespace FhvRoomSearch.Model
                 OnLecturerChanged();
             }
         }
-        private global::System.String _Lecturer;
+        private global::System.String _Lecturer = "";
         partial void OnLecturerChanging(global::System.String value);
         partial void OnLecturerChanged();
     
@@ -408,7 +398,7 @@ namespace FhvRoomSearch.Model
                 OnGroupChanged();
             }
         }
-        private global::System.String _Group;
+        private global::System.String _Group = "";
         partial void OnGroupChanging(global::System.String value);
         partial void OnGroupChanged();
 

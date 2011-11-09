@@ -42,7 +42,7 @@ namespace FhvRoomSearch.Import
 
                 wing.Name = wingNode.GetAttribute("Name");
 
-                // TODO: ParseLevels(wing, wingNode.GetElementsByTagName("Level"));
+                ParseLevels(wing, wingNode.GetElementsByTagName("Level"));
 
                 Wings.Add(wing);
             }
@@ -56,7 +56,7 @@ namespace FhvRoomSearch.Import
 
                 Level lvl = new Level();
 
-                wing.Name = levelNode.GetAttribute("Name");
+                lvl.Name = levelNode.GetAttribute("Name");
 
                 ParseRooms(lvl, levelNode.GetElementsByTagName("Room"));
 

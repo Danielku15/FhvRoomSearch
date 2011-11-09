@@ -68,24 +68,12 @@ namespace FhvRoomSearch.Model
         {
             try
             {
-                using (var transaction = BeginTransaction(_database))
+                foreach (Wing wing in newData)
                 {
-                    try
-                    {
-                        foreach (Wing wing in newData)
-                        {
-                            _database.WingSet.AddObject(wing);
-                        }
-                        _database.AcceptAllChanges();
-                        transaction.Commit();
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    _database.WingSet.AddObject(wing);
                 }
+                _database.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {
@@ -101,15 +89,18 @@ namespace FhvRoomSearch.Model
             {
                 try
                 {
-                    string[] tables = { "WingSet", "LevelSet", "RoomSet", "CourseSet" };
-                    foreach (string table in tables)
+                    string[] tables = { "RoomCourse", "CourseSet", "RoomSet", "LevelSet", "WingSet" };
+                    bool[] alter = { false, true, true, true, true };
+                    for (int index = 0; index < tables.Length; index++)
                     {
+                        string table = tables[index];
                         _database.ExecuteStoreCommand(string.Format("DELETE FROM [{0}]", table));
-                        _database.ExecuteStoreCommand(string.Format("ALTER TABLE [{0}] ALTER COLUMN Id IDENTITY (1,1)", table));
+                        if (alter[index])
+                            _database.ExecuteStoreCommand(string.Format("ALTER TABLE [{0}] ALTER COLUMN Id IDENTITY (1,1)",
+                                                                        table));
                     }
                     // Delete old data
                     transaction.Commit();
-                    _database.AcceptAllChanges();
                     success = true;
                 }
                 catch (Exception e)

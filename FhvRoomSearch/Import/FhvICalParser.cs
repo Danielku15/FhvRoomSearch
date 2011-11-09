@@ -73,7 +73,6 @@ namespace FhvRoomSearch.Import
 
         public void ProcessLine(string line)
         {
-            return;
             // transitions
             if (line == "BEGIN:VEVENT")
             {
