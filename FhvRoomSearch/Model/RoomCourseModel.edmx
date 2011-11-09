@@ -4,129 +4,130 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="RoomCourseModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-  <EntityContainer Name="RoomCourseModelStoreContainer">
-    <EntitySet Name="RoomSet" EntityType="RoomCourseModel.Store.RoomSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="LevelSet" EntityType="RoomCourseModel.Store.LevelSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="WingSet" EntityType="RoomCourseModel.Store.WingSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="CourseSet" EntityType="RoomCourseModel.Store.CourseSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="RoomCourse" EntityType="RoomCourseModel.Store.RoomCourse" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <AssociationSet Name="LevelRoom" Association="RoomCourseModel.Store.LevelRoom">
-      <End Role="Level" EntitySet="LevelSet" />
-      <End Role="Room" EntitySet="RoomSet" />
-    </AssociationSet>
-    <AssociationSet Name="WingLevel" Association="RoomCourseModel.Store.WingLevel">
-      <End Role="Wing" EntitySet="WingSet" />
-      <End Role="Level" EntitySet="LevelSet" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RoomCourse_Room" Association="RoomCourseModel.Store.FK_RoomCourse_Room">
-      <End Role="Room" EntitySet="RoomSet" />
-      <End Role="RoomCourse" EntitySet="RoomCourse" />
-    </AssociationSet>
-    <AssociationSet Name="FK_RoomCourse_Course" Association="RoomCourseModel.Store.FK_RoomCourse_Course">
-      <End Role="Course" EntitySet="CourseSet" />
-      <End Role="RoomCourse" EntitySet="RoomCourse" />
-    </AssociationSet>
-  </EntityContainer>
-  <EntityType Name="RoomSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RoomId" Type="nvarchar" Nullable="false" />
-    <Property Name="RoomName" Type="nvarchar" Nullable="false" />
-    <Property Name="Tables" Type="int" Nullable="false" />
-    <Property Name="Chairs" Type="int" Nullable="false" />
-    <Property Name="Computers" Type="int" Nullable="false" />
-    <Property Name="ExtrasValue" Type="int" Nullable="false" />
-    <Property Name="ChairTypeValue" Type="int" Nullable="false" />
-    <Property Name="Level_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="LevelSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" />
-    <Property Name="Wing_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="WingSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" Nullable="false" />
-  </EntityType>
-  <EntityType Name="CourseSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="StartTime" Type="datetime" Nullable="false" />
-    <Property Name="EndTime" Type="datetime" Nullable="false" />
-    <Property Name="Category" Type="nvarchar" Nullable="false" />
-    <Property Name="Notes" Type="nvarchar" Nullable="false" />
-    <Property Name="Module" Type="nvarchar" Nullable="false" />
-    <Property Name="Lecturer" Type="nvarchar" Nullable="false" />
-    <Property Name="Group" Type="nvarchar" Nullable="false" />
-  </EntityType>
-  <EntityType Name="RoomCourse">
-    <Key>
-      <PropertyRef Name="Rooms_Id" />
-      <PropertyRef Name="Course_Id" />
-    </Key>
-    <Property Name="Rooms_Id" Type="int" Nullable="false" />
-    <Property Name="Course_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <Association Name="LevelRoom">
-    <End Role="Level" Type="RoomCourseModel.Store.LevelSet" Multiplicity="1" />
-    <End Role="Room" Type="RoomCourseModel.Store.RoomSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Level">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Room">
-        <PropertyRef Name="Level_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="WingLevel">
-    <End Role="Wing" Type="RoomCourseModel.Store.WingSet" Multiplicity="1" />
-    <End Role="Level" Type="RoomCourseModel.Store.LevelSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Wing">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Level">
-        <PropertyRef Name="Wing_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_RoomCourse_Room">
-    <End Role="Room" Type="RoomCourseModel.Store.RoomSet" Multiplicity="1" />
-    <End Role="RoomCourse" Type="RoomCourseModel.Store.RoomCourse" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Room">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="RoomCourse">
-        <PropertyRef Name="Rooms_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_RoomCourse_Course">
-    <End Role="RoomCourse" Type="RoomCourseModel.Store.RoomCourse" Multiplicity="*" />
-    <End Role="Course" Type="RoomCourseModel.Store.CourseSet" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Course">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="RoomCourse">
-        <PropertyRef Name="Course_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-</Schema></edmx:StorageModels>
+      <Schema Namespace="RoomCourseModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="RoomCourseModelStoreContainer">
+          <EntitySet Name="RoomSet" EntityType="RoomCourseModel.Store.RoomSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="LevelSet" EntityType="RoomCourseModel.Store.LevelSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="WingSet" EntityType="RoomCourseModel.Store.WingSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CourseSet" EntityType="RoomCourseModel.Store.CourseSet" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="RoomCourse" EntityType="RoomCourseModel.Store.RoomCourse" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <AssociationSet Name="LevelRoom" Association="RoomCourseModel.Store.LevelRoom">
+            <End Role="Level" EntitySet="LevelSet" />
+            <End Role="Room" EntitySet="RoomSet" />
+          </AssociationSet>
+          <AssociationSet Name="WingLevel" Association="RoomCourseModel.Store.WingLevel">
+            <End Role="Wing" EntitySet="WingSet" />
+            <End Role="Level" EntitySet="LevelSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoomCourse_Room" Association="RoomCourseModel.Store.FK_RoomCourse_Room">
+            <End Role="Room" EntitySet="RoomSet" />
+            <End Role="RoomCourse" EntitySet="RoomCourse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoomCourse_Course" Association="RoomCourseModel.Store.FK_RoomCourse_Course">
+            <End Role="Course" EntitySet="CourseSet" />
+            <End Role="RoomCourse" EntitySet="RoomCourse" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="RoomSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoomId" Type="nvarchar" Nullable="false" />
+          <Property Name="RoomName" Type="nvarchar" Nullable="false" />
+          <Property Name="Tables" Type="int" Nullable="false" />
+          <Property Name="Chairs" Type="int" Nullable="false" />
+          <Property Name="Computers" Type="int" Nullable="false" />
+          <Property Name="ExtrasValue" Type="int" Nullable="false" />
+          <Property Name="ChairTypeValue" Type="int" Nullable="false" />
+          <Property Name="Level_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LevelSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" />
+          <Property Name="Wing_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WingSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CourseSet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Category" Type="nvarchar" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar" Nullable="false" />
+          <Property Name="Module" Type="nvarchar" Nullable="false" />
+          <Property Name="Lecturer" Type="nvarchar" Nullable="false" />
+          <Property Name="Group" Type="nvarchar" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RoomCourse">
+          <Key>
+            <PropertyRef Name="Rooms_Id" />
+            <PropertyRef Name="Course_Id" />
+          </Key>
+          <Property Name="Rooms_Id" Type="int" Nullable="false" />
+          <Property Name="Course_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="LevelRoom">
+          <End Role="Level" Type="RoomCourseModel.Store.LevelSet" Multiplicity="1" />
+          <End Role="Room" Type="RoomCourseModel.Store.RoomSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Level">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="Level_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WingLevel">
+          <End Role="Wing" Type="RoomCourseModel.Store.WingSet" Multiplicity="1" />
+          <End Role="Level" Type="RoomCourseModel.Store.LevelSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Wing">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Level">
+              <PropertyRef Name="Wing_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoomCourse_Room">
+          <End Role="Room" Type="RoomCourseModel.Store.RoomSet" Multiplicity="1" />
+          <End Role="RoomCourse" Type="RoomCourseModel.Store.RoomCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomCourse">
+              <PropertyRef Name="Rooms_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoomCourse_Course">
+          <End Role="RoomCourse" Type="RoomCourseModel.Store.RoomCourse" Multiplicity="*" />
+          <End Role="Course" Type="RoomCourseModel.Store.CourseSet" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RoomCourse">
+              <PropertyRef Name="Course_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RoomCourseModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -173,7 +174,9 @@
           <NavigationProperty Name="Wing" Relationship="RoomCourseModel.WingLevel" FromRole="Level" ToRole="Wing" />
         </EntityType>
         <Association Name="LevelRoom">
-          <End Type="RoomCourseModel.Level" Role="Level" Multiplicity="1" />
+          <End Type="RoomCourseModel.Level" Role="Level" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="RoomCourseModel.Room" Role="Room" Multiplicity="*" />
         </Association>
         <EntityType Name="Wing">
@@ -185,7 +188,9 @@
           <NavigationProperty Name="Level" Relationship="RoomCourseModel.WingLevel" FromRole="Wing" ToRole="Level" />
         </EntityType>
         <Association Name="WingLevel">
-          <End Type="RoomCourseModel.Wing" Role="Wing" Multiplicity="1" />
+          <End Type="RoomCourseModel.Wing" Role="Wing" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="RoomCourseModel.Level" Role="Level" Multiplicity="*" />
         </Association>
         <EntityType Name="Course">
@@ -203,85 +208,87 @@
           <Property Type="String" Name="Group" Nullable="false" />
         </EntityType>
         <Association Name="RoomCourse">
-          <End Type="RoomCourseModel.Room" Role="Room" Multiplicity="*" />
+          <End Type="RoomCourseModel.Room" Role="Room" Multiplicity="*" >
+          </End>
           <End Type="RoomCourseModel.Course" Role="Course" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="RoomCourseModelStoreContainer" CdmEntityContainer="RoomCourseModelContainer">
-    <EntitySetMapping Name="RoomSet">
-      <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Room)">
-        <MappingFragment StoreEntitySet="RoomSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="RoomId" ColumnName="RoomId" />
-          <ScalarProperty Name="RoomName" ColumnName="RoomName" />
-          <ScalarProperty Name="Tables" ColumnName="Tables" />
-          <ScalarProperty Name="Chairs" ColumnName="Chairs" />
-          <ScalarProperty Name="Computers" ColumnName="Computers" />
-          <ScalarProperty Name="ExtrasValue" ColumnName="ExtrasValue" />
-          <ScalarProperty Name="ChairTypeValue" ColumnName="ChairTypeValue" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="LevelSet">
-      <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Level)">
-        <MappingFragment StoreEntitySet="LevelSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="WingSet">
-      <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Wing)">
-        <MappingFragment StoreEntitySet="WingSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CourseSet">
-      <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Course)">
-        <MappingFragment StoreEntitySet="CourseSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-          <ScalarProperty Name="Category" ColumnName="Category" />
-          <ScalarProperty Name="Notes" ColumnName="Notes" />
-          <ScalarProperty Name="Module" ColumnName="Module" />
-          <ScalarProperty Name="Lecturer" ColumnName="Lecturer" />
-          <ScalarProperty Name="Group" ColumnName="Group" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <AssociationSetMapping Name="LevelRoom" TypeName="RoomCourseModel.LevelRoom" StoreEntitySet="RoomSet">
-      <EndProperty Name="Level">
-        <ScalarProperty Name="Id" ColumnName="Level_Id" />
-      </EndProperty>
-      <EndProperty Name="Room">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="WingLevel" TypeName="RoomCourseModel.WingLevel" StoreEntitySet="LevelSet">
-      <EndProperty Name="Wing">
-        <ScalarProperty Name="Id" ColumnName="Wing_Id" />
-      </EndProperty>
-      <EndProperty Name="Level">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="RoomCourse" TypeName="RoomCourseModel.RoomCourse" StoreEntitySet="RoomCourse">
-      <EndProperty Name="Room">
-        <ScalarProperty Name="Id" ColumnName="Rooms_Id" />
-      </EndProperty>
-      <EndProperty Name="Course">
-        <ScalarProperty Name="Id" ColumnName="Course_Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-  </EntityContainerMapping>
-</Mapping></edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RoomCourseModelStoreContainer" CdmEntityContainer="RoomCourseModelContainer">
+          <EntitySetMapping Name="RoomSet">
+            <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Room)">
+              <MappingFragment StoreEntitySet="RoomSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+                <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+                <ScalarProperty Name="Tables" ColumnName="Tables" />
+                <ScalarProperty Name="Chairs" ColumnName="Chairs" />
+                <ScalarProperty Name="Computers" ColumnName="Computers" />
+                <ScalarProperty Name="ExtrasValue" ColumnName="ExtrasValue" />
+                <ScalarProperty Name="ChairTypeValue" ColumnName="ChairTypeValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LevelSet">
+            <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Level)">
+              <MappingFragment StoreEntitySet="LevelSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WingSet">
+            <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Wing)">
+              <MappingFragment StoreEntitySet="WingSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseSet">
+            <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Course)">
+              <MappingFragment StoreEntitySet="CourseSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="Lecturer" ColumnName="Lecturer" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="LevelRoom" TypeName="RoomCourseModel.LevelRoom" StoreEntitySet="RoomSet">
+            <EndProperty Name="Level">
+              <ScalarProperty Name="Id" ColumnName="Level_Id" />
+            </EndProperty>
+            <EndProperty Name="Room">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="WingLevel" TypeName="RoomCourseModel.WingLevel" StoreEntitySet="LevelSet">
+            <EndProperty Name="Wing">
+              <ScalarProperty Name="Id" ColumnName="Wing_Id" />
+            </EndProperty>
+            <EndProperty Name="Level">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="RoomCourse" TypeName="RoomCourseModel.RoomCourse" StoreEntitySet="RoomCourse">
+            <EndProperty Name="Room">
+              <ScalarProperty Name="Id" ColumnName="Rooms_Id" />
+            </EndProperty>
+            <EndProperty Name="Course">
+              <ScalarProperty Name="Id" ColumnName="Course_Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer>

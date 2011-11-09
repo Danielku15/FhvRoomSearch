@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FhvRoomSearch.Model;
 
 namespace FhvRoomSearch.Design
@@ -21,6 +22,16 @@ namespace FhvRoomSearch.Design
         {
             get;
             set;
+        }
+
+        public bool ResetDatabase(IList<Wing> parsedData)
+        {
+            return true;
+        }
+
+        public void Cleanup()
+        {
+            
         }
     }
 }

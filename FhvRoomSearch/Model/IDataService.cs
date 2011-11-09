@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FhvRoomSearch.Model
 {
@@ -6,15 +7,22 @@ namespace FhvRoomSearch.Model
     {
         string CalendarUrl
         {
-            get; set;
+            get;
+            set;
         }
         long CalendarFileSize
         {
-            get; set;
+            get;
+            set;
         }
         DateTime CalendarLastDownload
         {
-            get; set;
+            get;
+            set;
         }
+
+        bool ResetDatabase(IList<Wing> parsedData);
+
+        void Cleanup();
     }
 }

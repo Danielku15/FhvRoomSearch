@@ -13,6 +13,7 @@ namespace FhvRoomSearch.Import
     /// </summary>
     class FhvICalParser
     {
+        private readonly IDataService _dataService;
         private Dictionary<string, Room> _rooms;
 
         private State _state;
@@ -20,6 +21,11 @@ namespace FhvRoomSearch.Import
         private string _dtEnd;
         private string _summary;
         private string _location;
+
+        public FhvICalParser(IDataService dataService)
+        {
+            _dataService = dataService;
+        }
 
         public IList<Wing> ParsedData
         {
@@ -43,7 +49,7 @@ namespace FhvRoomSearch.Import
                 XmlDocument document = new XmlDocument();
                 document.LoadXml(Resources.DefaultWingData);
 
-                WingSerializer serializer = new WingSerializer(document);
+                WingSerializer serializer = new WingSerializer(document, _dataService);
                 serializer.Deserialize();
                 ParsedData = serializer.Wings;
 
@@ -67,6 +73,7 @@ namespace FhvRoomSearch.Import
 
         public void ProcessLine(string line)
         {
+            return;
             // transitions
             if (line == "BEGIN:VEVENT")
             {
@@ -118,11 +125,12 @@ namespace FhvRoomSearch.Import
                 return;
             }
 
-            Course course = new Course
-            {
-                StartTime = DecodeDateTime(_dtStart),
-                EndTime = DecodeDateTime(_dtEnd)
-            };
+
+
+            Course course = new Course();
+
+            course.StartTime = DecodeDateTime(_dtStart);
+            course.EndTime = DecodeDateTime(_dtEnd);
             ParseSummary(course, _summary);
 
             AddToRooms(course, _location);

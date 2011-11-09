@@ -42,6 +42,7 @@ namespace FhvRoomSearch.ViewModel
 
         public static void Cleanup()
         {
+            ServiceLocator.Current.GetInstance<IDataService>().Cleanup();
         }
     }
 }

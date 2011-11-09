@@ -200,14 +200,17 @@ namespace FhvRoomSearch.ViewModel
                 long contentLength = response.ContentLength;
                 DateTime lastChange = response.LastModified;
 
-                // no changes
+                // check for changes
+                // (it seems the FHV timetable service generates the timetables
+                //  on-the-fly and always returns the current date as "LastModified"
+                //  this makes caching impossible, but we are prepared!)
                 if (_dataService.CalendarLastDownload >= lastChange)
                 {
                     return;
                 }
 
                 //
-                // Download the c
+                // Download the calendar
                 //
 
                 // We need to load the file
@@ -226,7 +229,7 @@ namespace FhvRoomSearch.ViewModel
 
                 // create parser
                 UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Setup default data");
-                FhvICalParser parser = new FhvICalParser();
+                FhvICalParser parser = new FhvICalParser(_dataService);
                 parser.Prepare();
 
                 // load data
@@ -251,41 +254,51 @@ namespace FhvRoomSearch.ViewModel
                     parser.ProcessLine(line);
                 }
 
-                // update settings for next download
+                // store everything in the new database
                 UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Saving data to local storage");
 
 
-                #region Debug Code
-
-                StringBuilder builder = new StringBuilder();
-
-                foreach (var wing in parser.ParsedData)
+                if(_dataService.ResetDatabase(parser.ParsedData))
                 {
-                    builder.AppendLine(wing.Name);
-                    foreach (var level in wing.Level)
-                    {
-                        builder.AppendLine("    " + level.Name);
-
-                        foreach (var room in level.Room)
-                        {
-                            builder.AppendLine("        " + room.RoomId);
-
-                            foreach (var course in room.Course)
-                            {
-                                builder.AppendLine(string.Format("            {0}({1} - {2})", course.Module, course.StartTime, course.EndTime));
-                            }
-                        }
-                    }
+                    // update settings for next download
+                    _dataService.CalendarFileSize = remoteStream.ReadByteCount;
+                    _dataService.CalendarLastDownload = lastChange;
+                }
+                else
+                {
+                    DownloadError("Could not save loaded data in the local storage");
                 }
 
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action(
-                                                              () =>
-                                                              {
-                                                                  DebugOutput = builder.ToString();
-                                                              }));
+                //#region Debug Code
 
-                #endregion
+                //StringBuilder builder = new StringBuilder();
 
+                //foreach (var wing in parser.ParsedData)
+                //{
+                //    builder.AppendLine(wing.Name);
+                //    foreach (var level in wing.Level)
+                //    {
+                //        builder.AppendLine("    " + level.Name);
+
+                //        foreach (var room in level.Room)
+                //        {
+                //            builder.AppendLine("        " + room.RoomId);
+
+                //            foreach (var course in room.Course)
+                //            {
+                //                builder.AppendLine(string.Format("            {0}({1} - {2})", course.Module, course.StartTime, course.EndTime));
+                //            }
+                //        }
+                //    }
+                //}
+
+                //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(
+                //                                              () =>
+                //                                              {
+                //                                                  DebugOutput = builder.ToString();
+                //                                              }));
+
+                //#endregion
             }
             catch (Exception e)
             {
@@ -295,6 +308,8 @@ namespace FhvRoomSearch.ViewModel
             finally
             {
                 UpdateProgress(TaskbarItemProgressState.None, 0, "Ready");
+                // We have a lot of unneeded objects in our memory. let the GC get rid of them
+                GC.Collect();
             }
         }
 

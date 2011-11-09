@@ -8,13 +8,19 @@ namespace FhvRoomSearch.Import
     class WingSerializer
     {
         private readonly XmlDocument _document;
+        private readonly IDataService _dataService;
 
-        public WingSerializer(XmlDocument document)
+        public WingSerializer(XmlDocument document, IDataService dataService)
         {
             _document = document;
+            _dataService = dataService;
         }
 
-        public IList<Wing> Wings { get; private set; }
+        public IList<Wing> Wings
+        {
+            get;
+            private set;
+        }
 
         public void Deserialize()
         {
@@ -30,13 +36,13 @@ namespace FhvRoomSearch.Import
         {
             foreach (var node in wingNodes)
             {
-                XmlElement wingNode = (XmlElement) node;
+                XmlElement wingNode = (XmlElement)node;
 
                 Wing wing = new Wing();
 
                 wing.Name = wingNode.GetAttribute("Name");
 
-                ParseLevels(wing, wingNode.GetElementsByTagName("Level"));
+                // TODO: ParseLevels(wing, wingNode.GetElementsByTagName("Level"));
 
                 Wings.Add(wing);
             }
@@ -46,11 +52,11 @@ namespace FhvRoomSearch.Import
         {
             foreach (var node in levelNodes)
             {
-                XmlElement levelNode = (XmlElement) node;
+                XmlElement levelNode = (XmlElement)node;
 
                 Level lvl = new Level();
 
-                lvl.Name = levelNode.GetAttribute("Name");
+                wing.Name = levelNode.GetAttribute("Name");
 
                 ParseRooms(lvl, levelNode.GetElementsByTagName("Room"));
 
@@ -62,7 +68,7 @@ namespace FhvRoomSearch.Import
         {
             foreach (var node in roomNodes)
             {
-                XmlElement roomNode = (XmlElement) node;
+                XmlElement roomNode = (XmlElement)node;
 
                 Room room = new Room();
 
@@ -71,8 +77,9 @@ namespace FhvRoomSearch.Import
                 room.Tables = int.Parse(roomNode.GetAttribute("Tables"));
                 room.Chairs = int.Parse(roomNode.GetAttribute("Chairs"));
                 room.Computers = int.Parse(roomNode.GetAttribute("Computers"));
-                room.Extras = (RoomExtras) Enum.Parse(typeof (RoomExtras), roomNode.GetAttribute("Extras"));
-                room.ChairType = (RoomChairTypes) Enum.Parse(typeof (RoomChairTypes), roomNode.GetAttribute("ChairType"));
+                room.Extras = ((RoomExtras) Enum.Parse(typeof (RoomExtras), roomNode.GetAttribute("Extras")));
+                room.ChairType =
+                    ((RoomChairTypes) Enum.Parse(typeof (RoomChairTypes), roomNode.GetAttribute("ChairType")));
 
                 lvl.Room.Add(room);
             }
