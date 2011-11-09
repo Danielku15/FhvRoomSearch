@@ -19,5 +19,10 @@
             get { return (RoomExtras)ExtrasValue; }
             set { ExtrasValue = (int)value; }
         }
+
+        public override string ToString()
+        {
+            return RoomId;
+        }
     }
 }

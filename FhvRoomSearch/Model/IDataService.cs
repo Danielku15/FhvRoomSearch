@@ -21,6 +21,20 @@ namespace FhvRoomSearch.Model
             set;
         }
 
+
+        IEnumerable<Wing> Wings
+        {
+            get;
+        }
+        IEnumerable<Level> Levels
+        {
+            get;
+        }
+        IEnumerable<Room> Rooms
+        {
+            get;
+        }
+
         bool ResetDatabase(IList<Wing> parsedData);
 
         void Cleanup();

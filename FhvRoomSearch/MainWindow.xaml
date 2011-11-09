@@ -4,12 +4,16 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         WindowStartupLocation="CenterScreen"
         xmlns:bh="clr-namespace:FhvRoomSearch.Behavior" xmlns:cv="clr-namespace:FhvRoomSearch.Converter"
-        Title="MainWindow" Height="387" Width="673"
+        xmlns:Model="clr-namespace:FhvRoomSearch.Model" xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        Title="MainWindow" Height="551" Width="906"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.Resources>
         <cv:ProgressStateVisibilityConverter x:Key="progressVisibilityConverter" />
         <cv:DoubleToIntPercentageConverter x:Key="doubleToIntPercentageConverter" />
-        <cv:ProgressStateIndeterminateBoolConverter x:Key="ProgressStateIndeterminateBoolConverter" />
+        <cv:ProgressStateBoolConverter x:Key="ProgressStateIndeterminateBoolConverter" TrueValue="Indeterminate" />
+        <cv:RoomExtrasFlagValueConverter x:Key="roomExtrasConverter" />
+        <cv:ProgressStateBoolConverter x:Key="progressStateEnableConverter" TrueValue="None" />
     </Window.Resources>
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="{Binding ProgressState}" ProgressValue="{Binding ProgressValue}" />
@@ -21,6 +25,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="200" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -30,8 +35,94 @@
                 <MenuItem Header="Update Calendar URL" Command="{Binding UpdateUrlCommand}" />
             </MenuItem>
         </Menu>
-        <TextBox Grid.Row="1" Text="{Binding DebugOutput}"></TextBox>
-        <StatusBar Grid.Row="2">
+        <GroupBox Header="Find a Room" Grid.Row="1" Margin="3" IsEnabled="{Binding ProgressState, Converter={StaticResource progressStateEnableConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label>Date</Label>
+                    <DatePicker Grid.Column="1" SelectedDate="{Binding SelectedDate}"></DatePicker>
+
+                    <Label Grid.Column="2">From</Label>
+                    <extToolkit:DateTimeUpDown Grid.Column="3" Format="Custom" FormatString="HH:mm" Value="{Binding SelectedStartTime}" />
+
+                    <Label Grid.Column="4">Till</Label>
+                    <extToolkit:DateTimeUpDown Grid.Column="5" Format="Custom" FormatString="HH:mm" Value="{Binding SelectedEndTime}" />
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label>
+                        <TextBlock Text="{Binding SelectedWings.Count,StringFormat='Wing (\{0\})'}" />
+                    </Label>
+                    <ListBox Style="{StaticResource ListBoxStyle}" Grid.Row="1" ItemsSource="{Binding DisplayedWings}" SelectionMode="Extended"
+                             bh:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedWings}"></ListBox>
+
+                    <Label Grid.Column="1">
+                        <TextBlock Text="{Binding SelectedLevels.Count,StringFormat='Level (\{0\})'}" />
+                    </Label>
+                    <ListBox Style="{StaticResource ListBoxStyle}" Grid.Column="1" ItemsSource="{Binding DisplayedLevels}" Grid.Row="1" SelectionMode="Extended"
+                             bh:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedLevels}"></ListBox>
+
+                    <Label Grid.Column="2">
+                        <TextBlock Text="{Binding SelectedRooms.Count,StringFormat='Rooms (\{0\})'}" />
+                    </Label>
+                    <ListBox Style="{StaticResource ListBoxStyle}" Grid.Column="2" ItemsSource="{Binding DisplayedRooms}" Grid.Row="1" SelectionMode="Extended"
+                             bh:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedRooms}"></ListBox>
+
+                    <Label Grid.Column="3">Room Extras</Label>
+                    <Border Grid.Column="3" Grid.Row="1" Margin="3" BorderThickness="1">
+                        <ScrollViewer>
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Setter Property="Margin" Value="5,5,5,0" />
+                                    </Style>
+                                </StackPanel.Resources>
+                                <CheckBox Content="Blackboard" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Blackboard}}" />
+                                <CheckBox Content="Projector" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Projector}}" />
+                                <CheckBox Content="Speaker" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Speaker}}" />
+                                <CheckBox Content="Microphone" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Microphone}}" />
+                                <CheckBox Content="SilverScreen" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.SilverScreen}}" />
+                                <CheckBox Content="Overhead" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Overhead}}" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                </Grid>
+                <Button Grid.Row="2">Search</Button>
+            </Grid>
+
+        </GroupBox>
+        <GridSplitter ResizeDirection="Rows" Grid.Row="1" Width="Auto" Height="3" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+        <TextBox Grid.Row="2" Text="{Binding DebugOutput}"></TextBox>
+        <StatusBar Grid.Row="3">
             <Label Content="{Binding ProgressStatus}" />
             <ProgressBar Width="120" Height="18" Minimum="0" Maximum="100"
                          Value="{Binding ProgressValue, Converter={StaticResource doubleToIntPercentageConverter}}"

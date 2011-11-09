@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +38,178 @@ namespace FhvRoomSearch.ViewModel
         {
             get;
             private set;
+        }
+
+        #endregion
+
+        #region Search Form Data
+
+        private DateTime _selectedDate;
+
+        public DateTime SelectedDate
+        {
+            get
+            {
+                return _selectedDate;
+            }
+            set
+            {
+                if (_selectedDate == value)
+                    return;
+                _selectedDate = value;
+                RaisePropertyChanged("SelectedDate");
+            }
+        }
+
+        private DateTime _selectedStartTime;
+
+        public DateTime SelectedStartTime
+        {
+            get
+            {
+                return _selectedStartTime;
+            }
+            set
+            {
+                if (_selectedStartTime == value)
+                    return;
+                _selectedStartTime = value;
+                RaisePropertyChanged("SelectedStartTime");
+            }
+        }
+
+        private DateTime _selectedEndTime;
+
+        public DateTime SelectedEndTime
+        {
+            get
+            {
+                return _selectedEndTime;
+            }
+            set
+            {
+                if (_selectedEndTime == value)
+                    return;
+                _selectedEndTime = value;
+                RaisePropertyChanged("SelectedEndTime");
+            }
+        }
+
+
+        private IEnumerable<Wing> _displayedWings;
+
+        public IEnumerable<Wing> DisplayedWings
+        {
+            get
+            {
+                return _displayedWings;
+            }
+            private set
+            {
+                if (_displayedWings == value)
+                    return;
+                _displayedWings = value;
+                RaisePropertyChanged("DisplayedWings");
+            }
+        }
+
+        private IEnumerable<Level> _displayedLevels;
+
+        public IEnumerable<Level> DisplayedLevels
+        {
+            get
+            {
+                return _displayedLevels;
+            }
+            private set
+            {
+                if (_displayedLevels == value)
+                    return;
+                _displayedLevels = value;
+                RaisePropertyChanged("DisplayedLevels");
+            }
+        }
+
+        private IEnumerable<Room> _displayedRooms;
+
+        public IEnumerable<Room> DisplayedRooms
+        {
+            get
+            {
+                return _displayedRooms;
+            }
+            private set
+            {
+                if (_displayedRooms == value)
+                    return;
+                _displayedRooms = value;
+                RaisePropertyChanged("DisplayedRooms");
+            }
+        }
+
+
+        private ObservableCollection<Wing> _selectedWings;
+        public ObservableCollection<Wing> SelectedWings
+        {
+            get
+            {
+                return _selectedWings;
+            }
+            private set
+            {
+                if (_selectedWings == value)
+                    return;
+                _selectedWings = value;
+                RaisePropertyChanged("SelectedWings");
+            }
+        }
+
+        private ObservableCollection<Level> _selectedLevels;
+        public ObservableCollection<Level> SelectedLevels
+        {
+            get
+            {
+                return _selectedLevels;
+            }
+            private set
+            {
+                if (_selectedLevels == value)
+                    return;
+                _selectedLevels = value;
+                RaisePropertyChanged("SelectedLevels");
+            }
+        }
+
+        private ObservableCollection<Room> _selectedRooms;
+        public ObservableCollection<Room> SelectedRooms
+        {
+            get
+            {
+                return _selectedRooms;
+            }
+            private set
+            {
+                if (_selectedRooms == value)
+                    return;
+                _selectedRooms = value;
+                RaisePropertyChanged("SelectedRooms");
+            }
+        }
+
+        private RoomExtras _selectedExtras;
+        public RoomExtras SelectedExtras
+        {
+            get
+            {
+                return _selectedExtras;
+            }
+            set
+            {
+                if (_selectedExtras == value)
+                    return;
+                _selectedExtras = value;
+                RaisePropertyChanged("SelectedExtras");
+            }
         }
 
         #endregion
@@ -93,26 +269,6 @@ namespace FhvRoomSearch.ViewModel
 
         #endregion
 
-        #region Debug Props
-
-        private string _debugOutput;
-        public string DebugOutput
-        {
-            get
-            {
-                return _debugOutput;
-            }
-            set
-            {
-                if (_debugOutput == value)
-                    return;
-                _debugOutput = value;
-                RaisePropertyChanged("DebugOutput");
-            }
-        }
-
-        #endregion
-
         public MainViewModel(IDataService dataService)
         {
             _dataService = dataService;
@@ -121,7 +277,40 @@ namespace FhvRoomSearch.ViewModel
             ProgressStatus = "Ready";
             ReloadCoursesCommand = new RelayCommand(ReloadCourses);
             UpdateUrlCommand = new RelayCommand(RequestNewCalendarUrl);
+
+            ResetData();
+
+            SelectedDate = DateTime.Today;
+            SelectedStartTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0);
+            SelectedEndTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 23, 59, 59);
+
+            SelectedExtras = RoomExtras.None;
+
         }
+
+        private void ResetData()
+        {
+            DisplayedWings = _dataService.Wings.OrderBy(w => w.Name);
+
+            SelectedWings = new ObservableCollection<Wing>(DisplayedWings);
+            SelectedWings.CollectionChanged += OnSelectedWingsChanged;
+            SelectedLevels = new ObservableCollection<Level>();
+            SelectedLevels.CollectionChanged += OnSelectedLevelsChanged;
+            SelectedRooms = new ObservableCollection<Room>();
+        }
+
+        private void OnSelectedLevelsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            DisplayedRooms = _dataService.Rooms.Where(r => SelectedLevels.Any( l => l.Id == r.Level.Id)).OrderBy(r => r.RoomId);
+        }
+
+        private void OnSelectedWingsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            DisplayedLevels = _dataService.Levels.Where(
+            l => SelectedWings.Any(w => w.Id == l.Wing.Id)).OrderBy(l => l.Name);
+        }
+
+
 
         #region Course Reloading
 
@@ -258,47 +447,18 @@ namespace FhvRoomSearch.ViewModel
                 UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Saving data to local storage");
 
 
-                if(_dataService.ResetDatabase(parser.ParsedData))
+                if (_dataService.ResetDatabase(parser.ParsedData))
                 {
                     // update settings for next download
                     _dataService.CalendarFileSize = remoteStream.ReadByteCount;
                     _dataService.CalendarLastDownload = lastChange;
+
+                    ResetData();
                 }
                 else
                 {
                     DownloadError("Could not save loaded data in the local storage");
                 }
-
-                //#region Debug Code
-
-                //StringBuilder builder = new StringBuilder();
-
-                //foreach (var wing in parser.ParsedData)
-                //{
-                //    builder.AppendLine(wing.Name);
-                //    foreach (var level in wing.Level)
-                //    {
-                //        builder.AppendLine("    " + level.Name);
-
-                //        foreach (var room in level.Room)
-                //        {
-                //            builder.AppendLine("        " + room.RoomId);
-
-                //            foreach (var course in room.Course)
-                //            {
-                //                builder.AppendLine(string.Format("            {0}({1} - {2})", course.Module, course.StartTime, course.EndTime));
-                //            }
-                //        }
-                //    }
-                //}
-
-                //DispatcherHelper.UIDispatcher.BeginInvoke(new Action(
-                //                                              () =>
-                //                                              {
-                //                                                  DebugOutput = builder.ToString();
-                //                                              }));
-
-                //#endregion
             }
             catch (Exception e)
             {
@@ -312,6 +472,7 @@ namespace FhvRoomSearch.ViewModel
                 GC.Collect();
             }
         }
+
 
         private void DownloadError(string message)
         {

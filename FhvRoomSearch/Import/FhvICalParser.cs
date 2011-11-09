@@ -124,8 +124,6 @@ namespace FhvRoomSearch.Import
                 return;
             }
 
-
-
             Course course = new Course();
 
             course.StartTime = DecodeDateTime(_dtStart);

@@ -10,11 +10,15 @@ namespace FhvRoomSearch.Model
 {
     class DataService : IDataService
     {
-        private readonly RoomCourseModelContainer _database;
+        private RoomCourseModelContainer _database;
 
         public DataService()
         {
             _database = new RoomCourseModelContainer();
+            _database.WingSet.MergeOption = MergeOption.NoTracking;
+            _database.LevelSet.MergeOption = MergeOption.NoTracking;
+            _database.RoomSet.MergeOption = MergeOption.NoTracking;
+            _database.CourseSet.MergeOption = MergeOption.NoTracking;
         }
 
         public string CalendarUrl
@@ -56,6 +60,30 @@ namespace FhvRoomSearch.Model
             }
         }
 
+        public IEnumerable<Wing> Wings
+        {
+            get
+            {
+                return _database.WingSet;
+            }
+        }
+
+        public IEnumerable<Level> Levels
+        {
+            get
+            {
+                return _database.LevelSet;
+            }
+        }
+
+        public IEnumerable<Room> Rooms
+        {
+            get
+            {
+                return _database.RoomSet;
+            }
+        }
+
         public bool ResetDatabase(IList<Wing> newData)
         {
             bool success = DeleteOldData();
@@ -64,7 +92,7 @@ namespace FhvRoomSearch.Model
             return InsertNewData(newData);
         }
 
-        private bool InsertNewData(IEnumerable<Wing> newData)
+        private bool InsertNewData(IList<Wing> newData)
         {
             try
             {
@@ -82,6 +110,12 @@ namespace FhvRoomSearch.Model
             }
         }
 
+        private void Reconnect()
+        {
+            _database.Dispose();
+            _database = new RoomCourseModelContainer();
+        }
+
         private bool DeleteOldData()
         {
             bool success;
@@ -89,18 +123,19 @@ namespace FhvRoomSearch.Model
             {
                 try
                 {
-                    string[] tables = { "RoomCourse", "CourseSet", "RoomSet", "LevelSet", "WingSet" };
+                    string[] tables = { "RoomCourse", "WingSet", "LevelSet", "RoomSet", "CourseSet" };
                     bool[] alter = { false, true, true, true, true };
-                    for (int index = 0; index < tables.Length; index++)
+                    for (int i = 0; i < tables.Length; i++)
                     {
-                        string table = tables[index];
+                        string table = tables[i];
                         _database.ExecuteStoreCommand(string.Format("DELETE FROM [{0}]", table));
-                        if (alter[index])
-                            _database.ExecuteStoreCommand(string.Format("ALTER TABLE [{0}] ALTER COLUMN Id IDENTITY (1,1)",
-                                                                        table));
+                        if (alter[i])
+                            _database.ExecuteStoreCommand(
+                                string.Format("ALTER TABLE [{0}] ALTER COLUMN Id IDENTITY (1,1)", table));
                     }
                     // Delete old data
                     transaction.Commit();
+                    _database.AcceptAllChanges();
                     success = true;
                 }
                 catch (Exception e)

@@ -89,6 +89,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
@@ -107,6 +108,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\Libraries\WpfToolkit\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -114,15 +118,19 @@
     </Compile>
     <Compile Include="Behavior\CalendarUrlBehavior.cs" />
     <Compile Include="Behavior\CalendarUrlMessage.cs" />
+    <Compile Include="Behavior\IListItemConverter.cs" />
     <Compile Include="Behavior\MessageBoxBehavior.cs" />
+    <Compile Include="Behavior\MultiSelectorBehavior.cs" />
+    <Compile Include="Behavior\TwoListSynchronizer.cs" />
     <Compile Include="CalendarUrlDialog.xaml.cs">
       <DependentUpon>CalendarUrlDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Controls\TextAdorner.cs" />
     <Compile Include="Converter\DoubleToIntPercentageConverter.cs" />
-    <Compile Include="Converter\ProgressStateIndeterminateBoolConverter.cs" />
+    <Compile Include="Converter\ProgressStateBoolConverter.cs" />
     <Compile Include="Converter\ProgressStateVisibilityConverter.cs" />
+    <Compile Include="Converter\RoomExtrasFlagValueConverter.cs" />
     <Compile Include="IO\ByteCountingStream.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
@@ -133,6 +141,8 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Level.cs" />
+    <Compile Include="Model\Wing.cs" />
     <Compile Include="RoomConverterWindow.xaml.cs">
       <DependentUpon>RoomConverterWindow.xaml</DependentUpon>
     </Compile>
