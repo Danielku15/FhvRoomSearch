@@ -135,6 +135,22 @@ namespace FhvRoomSearch.Model
             }
         }
         private ObjectSet<Course> _CourseSet;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Config> ConfigSet
+        {
+            get
+            {
+                if ((_ConfigSet == null))
+                {
+                    _ConfigSet = base.CreateObjectSet<Config>("ConfigSet");
+                }
+                return _ConfigSet;
+            }
+        }
+        private ObjectSet<Config> _ConfigSet;
 
         #endregion
         #region AddTo Methods
@@ -170,6 +186,14 @@ namespace FhvRoomSearch.Model
         {
             base.AddObject("CourseSet", course);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the ConfigSet EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToConfigSet(Config config)
+        {
+            base.AddObject("ConfigSet", config);
+        }
 
         #endregion
     }
@@ -178,6 +202,87 @@ namespace FhvRoomSearch.Model
     #endregion
     
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="RoomCourseModel", Name="Config")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Config : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Config object.
+        /// </summary>
+        /// <param name="key">Initial value of the Key property.</param>
+        /// <param name="value">Initial value of the Value property.</param>
+        public static Config CreateConfig(global::System.String key, global::System.String value)
+        {
+            Config config = new Config();
+            config.Key = key;
+            config.Value = value;
+            return config;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Key
+        {
+            get
+            {
+                return _Key;
+            }
+            set
+            {
+                if (_Key != value)
+                {
+                    OnKeyChanging(value);
+                    ReportPropertyChanging("Key");
+                    _Key = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Key");
+                    OnKeyChanged();
+                }
+            }
+        }
+        private global::System.String _Key;
+        partial void OnKeyChanging(global::System.String value);
+        partial void OnKeyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Value
+        {
+            get
+            {
+                return _Value;
+            }
+            set
+            {
+                OnValueChanging(value);
+                ReportPropertyChanging("Value");
+                _Value = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Value");
+                OnValueChanged();
+            }
+        }
+        private global::System.String _Value;
+        partial void OnValueChanging(global::System.String value);
+        partial void OnValueChanged();
+
+        #endregion
+    
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

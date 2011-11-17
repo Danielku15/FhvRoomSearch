@@ -10,6 +10,7 @@
     <EntitySet Name="LevelSet" EntityType="RoomCourseModel.Store.LevelSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WingSet" EntityType="RoomCourseModel.Store.WingSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="CourseSet" EntityType="RoomCourseModel.Store.CourseSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ConfigSet" EntityType="RoomCourseModel.Store.ConfigSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="RoomCourse" EntityType="RoomCourseModel.Store.RoomCourse" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="LevelRoom" Association="RoomCourseModel.Store.LevelRoom">
       <End Role="Level" EntitySet="LevelSet" />
@@ -69,6 +70,13 @@
     <Property Name="Module" Type="nvarchar" Nullable="false" DefaultValue="" />
     <Property Name="Lecturer" Type="nvarchar" Nullable="false" DefaultValue="" />
     <Property Name="Group" Type="nvarchar" Nullable="false" DefaultValue="" />
+  </EntityType>
+  <EntityType Name="ConfigSet">
+    <Key>
+      <PropertyRef Name="Key" />
+    </Key>
+    <Property Name="Key" Type="nvarchar" Nullable="false" />
+    <Property Name="Value" Type="nvarchar" Nullable="false" />
   </EntityType>
   <EntityType Name="RoomCourse">
     <Key>
@@ -151,6 +159,7 @@
             <End Role="Room" EntitySet="RoomSet" />
             <End Role="Course" EntitySet="CourseSet" />
           </AssociationSet>
+          <EntitySet Name="ConfigSet" EntityType="RoomCourseModel.Config" />
         </EntityContainer>
         <EntityType Name="Room">
           <Key>
@@ -215,6 +224,13 @@
           </End>
           <End Type="RoomCourseModel.Course" Role="Course" Multiplicity="*" />
         </Association>
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Type="String" Name="Key" Nullable="false" />
+          <Property Type="String" Name="Value" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -262,6 +278,14 @@
           <ScalarProperty Name="Module" ColumnName="Module" />
           <ScalarProperty Name="Lecturer" ColumnName="Lecturer" />
           <ScalarProperty Name="Group" ColumnName="Group" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ConfigSet">
+      <EntityTypeMapping TypeName="IsTypeOf(RoomCourseModel.Config)">
+        <MappingFragment StoreEntitySet="ConfigSet">
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -324,6 +348,7 @@
           <ConnectorPoint PointX="6.5" PointY="3.37474609375" />
           <ConnectorPoint PointX="7.875" PointY="3.37474609375" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="RoomCourseModel.Config" PointX="2.875" PointY="4.25" Width="1.5" Height="1.4033821614583326" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

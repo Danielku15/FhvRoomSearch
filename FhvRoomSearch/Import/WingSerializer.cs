@@ -26,7 +26,6 @@ namespace FhvRoomSearch.Import
         {
             Wings = new List<Wing>();
 
-
             XmlElement root = _document.DocumentElement;
             ParseWings(root.GetElementsByTagName("Wing"));
 

@@ -38,5 +38,7 @@ namespace FhvRoomSearch.Model
         bool ResetDatabase(IList<Wing> parsedData);
 
         void Cleanup();
+
+        IEnumerable<SearchResult> PerformSearch(DateTime start, DateTime end, IList<Room> rooms);
     }
 }

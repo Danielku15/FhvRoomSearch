@@ -45,5 +45,10 @@ namespace FhvRoomSearch.Design
         {
             
         }
+
+        public IEnumerable<SearchResult> PerformSearch(DateTime start, DateTime end, IList<Room> rooms)
+        {
+            return new SearchResult[0];
+        }
     }
 }

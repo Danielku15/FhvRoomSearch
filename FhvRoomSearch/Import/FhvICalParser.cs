@@ -100,11 +100,11 @@ namespace FhvRoomSearch.Import
         {
             if (line.StartsWith("DTSTART;TZID=Europe/Vienna"))
             {
-                _dtStart = line.Substring(28);
+                _dtStart = line.Substring(27);
             }
             else if (line.StartsWith("DTEND;TZID=Europe/Vienna:"))
             {
-                _dtEnd = line.Substring(26);
+                _dtEnd = line.Substring(25);
             }
             else if (line.StartsWith("SUMMARY:"))
             {

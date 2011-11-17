@@ -40,6 +40,12 @@ namespace FhvRoomSearch.ViewModel
             private set;
         }
 
+        public ICommand SearchCommand
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         #region Search Form Data
@@ -75,6 +81,10 @@ namespace FhvRoomSearch.ViewModel
                     return;
                 _selectedStartTime = value;
                 RaisePropertyChanged("SelectedStartTime");
+                if (_selectedStartTime > _selectedEndTime)
+                {
+                    SelectedEndTime = _selectedStartTime.AddMinutes(15);
+                }
             }
         }
 
@@ -92,6 +102,10 @@ namespace FhvRoomSearch.ViewModel
                     return;
                 _selectedEndTime = value;
                 RaisePropertyChanged("SelectedEndTime");
+                if (_selectedEndTime < _selectedStartTime)
+                {
+                    SelectedStartTime = _selectedEndTime.AddMinutes(-15);
+                }
             }
         }
 
@@ -144,6 +158,24 @@ namespace FhvRoomSearch.ViewModel
                     return;
                 _displayedRooms = value;
                 RaisePropertyChanged("DisplayedRooms");
+            }
+        }
+
+
+        private IEnumerable<SearchResult> _searchResults;
+
+        public IEnumerable<SearchResult> SearchResults
+        {
+            get
+            {
+                return _searchResults;
+            }
+            private set
+            {
+                if (_searchResults == value)
+                    return;
+                _searchResults = value;
+                RaisePropertyChanged("SearchResults");
             }
         }
 
@@ -208,6 +240,7 @@ namespace FhvRoomSearch.ViewModel
                 if (_selectedExtras == value)
                     return;
                 _selectedExtras = value;
+                OnSelectedLevelsChanged(this, null);
                 RaisePropertyChanged("SelectedExtras");
             }
         }
@@ -277,15 +310,37 @@ namespace FhvRoomSearch.ViewModel
             ProgressStatus = "Ready";
             ReloadCoursesCommand = new RelayCommand(ReloadCourses);
             UpdateUrlCommand = new RelayCommand(RequestNewCalendarUrl);
+            SearchCommand = new RelayCommand(PerformSearch,
+                               () => SelectedRooms != null && SelectedRooms.Count > 0);
 
             ResetData();
 
             SelectedDate = DateTime.Today;
-            SelectedStartTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0);
-            SelectedEndTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 23, 59, 59);
+            SelectedStartTime = DateTime.Now;
 
+            var today = Today;
+            if (DateTime.Now > today.AddHours(16))
+            {
+                SelectedEndTime = DateTime.Now.AddHours(1);
+            }
+            else if (DateTime.Now >= today.AddHours(12))
+            {
+                SelectedEndTime = today.AddHours(16);
+            }
+            else
+            {
+                SelectedEndTime = today.AddHours(12);
+            }
             SelectedExtras = RoomExtras.None;
 
+        }
+
+        private DateTime Today
+        {
+            get
+            {
+                return new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0);
+            }
         }
 
         private void ResetData()
@@ -297,17 +352,33 @@ namespace FhvRoomSearch.ViewModel
             SelectedLevels = new ObservableCollection<Level>();
             SelectedLevels.CollectionChanged += OnSelectedLevelsChanged;
             SelectedRooms = new ObservableCollection<Room>();
+            SelectedRooms.CollectionChanged += OnSelectedRoomsChanged;
+
+            SearchResults = new ObservableCollection<SearchResult>();
+        }
+
+        private void OnSelectedRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ((RelayCommand)SearchCommand).RaiseCanExecuteChanged();
         }
 
         private void OnSelectedLevelsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            DisplayedRooms = _dataService.Rooms.Where(r => SelectedLevels.Any( l => l.Id == r.Level.Id)).OrderBy(r => r.RoomId);
+            DisplayedRooms = from r in _dataService.Rooms
+                             where (r.Extras & SelectedExtras) == SelectedExtras && SelectedLevels.Any(l => l.Id == r.Level.Id)
+                             orderby r.RoomId
+                             select r;
+            //_dataService.Rooms.Where(r => SelectedLevels.Any(l => l.Id == r.Level.Id)).OrderBy(r => r.RoomId);
         }
 
         private void OnSelectedWingsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            DisplayedLevels = _dataService.Levels.Where(
-            l => SelectedWings.Any(w => w.Id == l.Wing.Id)).OrderBy(l => l.Name);
+            DisplayedLevels = from l in _dataService.Levels
+                              where SelectedWings.Any(w => w.Id == l.Wing.Id)
+                              orderby l.Name
+                              select l;
+            //DisplayedLevels = _dataService.Levels.Where(
+            //l => SelectedWings.Any(w => w.Id == l.Wing.Id)).OrderBy(l => l.Name);
         }
 
 
@@ -463,7 +534,6 @@ namespace FhvRoomSearch.ViewModel
             catch (Exception e)
             {
                 DownloadError(e.Message);
-                Debug.Fail(e.Message, e.ToString());
             }
             finally
             {
@@ -523,5 +593,33 @@ namespace FhvRoomSearch.ViewModel
         }
         #endregion
 
+
+        public void PerformSearch()
+        {
+            if (SelectedRooms.Count == 0)
+            {
+                SearchResults = new SearchResult[0];
+                return;
+            }
+
+            ProgressState = TaskbarItemProgressState.Indeterminate;
+            ProgressStatus = "Searching Rooms";
+
+            Task.Factory.StartNew(DoSearchAsync).ContinueWith(
+                t =>
+                {
+                    ProgressState = TaskbarItemProgressState.None;
+                    ProgressStatus = "Ready";
+                    RaisePropertyChanged("SearchResults");
+                }, TaskContinuationOptions.ExecuteSynchronously);
+        }
+
+        private void DoSearchAsync()
+        {
+            DateTime start = SelectedDate.Date + SelectedStartTime.TimeOfDay;
+            DateTime end = SelectedDate.Date + SelectedEndTime.TimeOfDay;
+
+            _searchResults = _dataService.PerformSearch(start, end, SelectedRooms);
+        }
     }
 }

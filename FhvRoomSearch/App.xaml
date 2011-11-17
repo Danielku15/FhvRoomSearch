@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:FhvRoomSearch.ViewModel"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:System="clr-namespace:System;assembly=mscorlib" StartupUri="MainWindow.xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" StartupUri="MainWindow.xaml"
              Startup="OnApplicationStartup"
              mc:Ignorable="d">
     <Application.Resources>
@@ -12,8 +11,63 @@
         <Style TargetType="Label">
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
-        <Style TargetType="ListBox">
+        <Style TargetType="ItemsControl">
             <Setter Property="Margin" Value="3" />
+        </Style>
+
+        <LinearGradientBrush x:Key="ResultBackground" EndPoint="0,1">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="#ececec" Offset="0" />
+                <GradientStop Color="#d9d6d6" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ResultBorder" EndPoint="0,1">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Color="#d8d8d8" Offset="0" />
+                <GradientStop Color="#e5e5e5" Offset="1" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+
+
+        <Style TargetType="Border" x:Key="ResultBox">
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="140" />
+            <Setter Property="Background" Value="{StaticResource ResultBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ResultBorder}" />
+        </Style>
+
+        <!--Border colors-->
+        <Color x:Key="BorderLightColor">#8C8C8C</Color>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+
+                            <ContentPresenter Grid.Row="0" Margin="4,4,4,0" ContentSource="Header" RecognizesAccessKey="True" />
+
+                            <Border Grid.Row="1" BorderThickness="0,1,0,0" Margin="4,0,4,4">
+                                <Border.BorderBrush>
+                                    <SolidColorBrush Color="{StaticResource BorderLightColor}" />
+                                </Border.BorderBrush>
+                                <ContentPresenter Margin="5" />
+                            </Border>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <DataTemplate x:Key="CheckBoxItem">
@@ -23,31 +77,19 @@
             </StackPanel>
         </DataTemplate>
 
-        <SolidColorBrush x:Key="NormalItemBackground" Color="White" />
+        <SolidColorBrush x:Key="NormalItemBackground" Color="Transparent" />
         <SolidColorBrush x:Key="HotItemBackground" Color="LightGray" />
         <SolidColorBrush x:Key="SelectedItemBackground" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
-        
+
         <Style x:Key="ListboxItemStyle" TargetType="{x:Type ListBoxItem}">
-       
-          <Setter Property="Margin" Value="1,2,1,1"/>
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Background" Value="{StaticResource NormalItemBackground}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}" />
-                            <Border Background="#BEFFFFFF" Margin="3,1">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Border Margin="2,1,2,0" Grid.Row="0" Background="#57FFFFFF" />
-                                </Grid>
-                            </Border>
-                            <ContentPresenter Margin="8,5" />
-                        </Grid>
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="#D0D0D0">
+                            <ContentPresenter Margin="8,6" />
+                        </Border>
                         <ControlTemplate.Triggers>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -66,7 +108,7 @@
         </Style>
         <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}">
             <Setter Property="ItemContainerStyle" Value="{DynamicResource ListboxItemStyle}" />
-            <Setter Property="Margin" Value="3,3,2,1" />
+            <Setter Property="BorderThickness" Value="0" />
         </Style>
     </Application.Resources>
 </Application>

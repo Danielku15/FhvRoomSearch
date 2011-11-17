@@ -1,6 +1,8 @@
-﻿namespace FhvRoomSearch.Model
+﻿using System;
+
+namespace FhvRoomSearch.Model
 {
-    partial class Room
+    partial class Room : IEquatable<Room>
     {
         public RoomChairTypes ChairType
         {
@@ -23,6 +25,36 @@
         public override string ToString()
         {
             return RoomId;
+        }
+
+        public bool Equals(Room other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other._Id == _Id && _Id != 0;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (Room)) return false;
+            return Equals((Room) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return _Id;
+        }
+
+        public static bool operator ==(Room left, Room right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Room left, Room right)
+        {
+            return !Equals(left, right);
         }
     }
 }

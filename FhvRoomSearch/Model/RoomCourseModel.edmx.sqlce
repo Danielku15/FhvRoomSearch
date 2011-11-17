@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server Compact Edition
 -- --------------------------------------------------
--- Date Created: 11/09/2011 19:13:09
+-- Date Created: 11/17/2011 23:42:54
 -- Generated from EDMX file: D:\Dev\C#\Projects\FhvRoomSearch\FhvRoomSearch\Model\RoomCourseModel.edmx
 -- --------------------------------------------------
 
@@ -83,6 +83,13 @@ CREATE TABLE [CourseSet] (
 );
 GO
 
+-- Creating table 'ConfigSet'
+CREATE TABLE [ConfigSet] (
+    [Key] nvarchar(4000)  NOT NULL,
+    [Value] nvarchar(4000)  NOT NULL
+);
+GO
+
 -- Creating table 'RoomCourse'
 CREATE TABLE [RoomCourse] (
     [Rooms_Id] int  NOT NULL,
@@ -116,6 +123,12 @@ GO
 ALTER TABLE [CourseSet]
 ADD CONSTRAINT [PK_CourseSet]
     PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Key] in table 'ConfigSet'
+ALTER TABLE [ConfigSet]
+ADD CONSTRAINT [PK_ConfigSet]
+    PRIMARY KEY ([Key] );
 GO
 
 -- Creating primary key on [Rooms_Id], [Course_Id] in table 'RoomCourse'

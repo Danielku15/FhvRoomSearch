@@ -125,12 +125,14 @@
     <Compile Include="CalendarUrlDialog.xaml.cs">
       <DependentUpon>CalendarUrlDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MinuteDateTimeUpDown.cs" />
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Controls\TextAdorner.cs" />
     <Compile Include="Converter\DoubleToIntPercentageConverter.cs" />
     <Compile Include="Converter\ProgressStateBoolConverter.cs" />
     <Compile Include="Converter\ProgressStateVisibilityConverter.cs" />
     <Compile Include="Converter\RoomExtrasFlagValueConverter.cs" />
+    <Compile Include="Converter\RoomStateColorConverter.cs" />
     <Compile Include="IO\ByteCountingStream.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
@@ -142,6 +144,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Level.cs" />
+    <Compile Include="Model\SearchResult.cs" />
     <Compile Include="Model\Wing.cs" />
     <Compile Include="RoomConverterWindow.xaml.cs">
       <DependentUpon>RoomConverterWindow.xaml</DependentUpon>
@@ -175,15 +178,6 @@
     </EntityDeploy>
     <None Include="app.manifest" />
     <None Include="Model\RoomCourseModel.edmx.sqlce" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
