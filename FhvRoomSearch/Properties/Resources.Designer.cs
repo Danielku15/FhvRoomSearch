@@ -80,5 +80,12 @@ namespace FhvRoomSearch.Properties {
                 return ResourceManager.GetString("DefaultWingData", resourceCulture);
             }
         }
+        
+        internal static byte[] RoomCourseModel {
+            get {
+                object obj = ResourceManager.GetObject("RoomCourseModel", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
