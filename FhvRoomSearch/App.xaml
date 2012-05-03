@@ -7,108 +7,16 @@
              Startup="OnApplicationStartup"
              mc:Ignorable="d">
     <Application.Resources>
-        <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True"/>
-        <Style TargetType="Label">
-            <Setter Property="FontWeight" Value="Bold" />
-        </Style>
-        <Style TargetType="ItemsControl">
-            <Setter Property="Margin" Value="3" />
-        </Style>
+        <ResourceDictionary>
 
-        <LinearGradientBrush x:Key="ResultBackground" EndPoint="0,1">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Color="#ececec" Offset="0" />
-                <GradientStop Color="#d9d6d6" Offset="1" />
-            </LinearGradientBrush.GradientStops>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="ResultBorder" EndPoint="0,1">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Color="#d8d8d8" Offset="0" />
-                <GradientStop Color="#e5e5e5" Offset="1" />
-            </LinearGradientBrush.GradientStops>
-        </LinearGradientBrush>
-
-
-
-        <Style TargetType="Border" x:Key="ResultBox">
-            <Setter Property="CornerRadius" Value="5" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Width" Value="300" />
-            <Setter Property="Height" Value="140" />
-            <Setter Property="Background" Value="{StaticResource ResultBackground}" />
-            <Setter Property="BorderBrush" Value="{StaticResource ResultBorder}" />
-        </Style>
-
-        <!--Border colors-->
-        <Color x:Key="BorderLightColor">#8C8C8C</Color>
-
-        <Style TargetType="GroupBox">
-            <Setter Property="Margin" Value="3" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GroupBox">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-
-                            <ContentPresenter Grid.Row="0" Margin="4,4,4,0" ContentSource="Header" RecognizesAccessKey="True" />
-
-                            <Border Grid.Row="1" BorderThickness="0,1,0,0" Margin="4,0,4,4">
-                                <Border.BorderBrush>
-                                    <SolidColorBrush Color="{StaticResource BorderLightColor}" />
-                                </Border.BorderBrush>
-                                <ContentPresenter Margin="5" />
-                            </Border>
-
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <DataTemplate x:Key="CheckBoxItem">
-            <StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding Path=IsChecked, Mode=TwoWay}" />
-                <TextBlock Text="{Binding DisplayText}"/>
-            </StackPanel>
-        </DataTemplate>
-
-        <SolidColorBrush x:Key="NormalItemBackground" Color="Transparent" />
-        <SolidColorBrush x:Key="HotItemBackground" Color="LightGray" />
-        <SolidColorBrush x:Key="SelectedItemBackground" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
-
-        <Style x:Key="ListboxItemStyle" TargetType="{x:Type ListBoxItem}">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{StaticResource NormalItemBackground}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="#D0D0D0">
-                            <ContentPresenter Margin="8,6" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsMouseOver" Value="True" />
-                                    <Condition Property="IsSelected" Value="False"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Background" Value="{StaticResource HotItemBackground}" />
-                            </MultiTrigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource SelectedItemBackground}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}">
-            <Setter Property="ItemContainerStyle" Value="{DynamicResource ListboxItemStyle}" />
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="mercury" Source="/ReuxablesLegacy;component/mercury.xaml" />
+                <ResourceDictionary x:Name="myStyles" Source="Themes/MyTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True"/>
+ 
+        </ResourceDictionary>
+    
     </Application.Resources>
 </Application>

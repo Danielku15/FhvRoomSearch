@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +14,15 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
-using System.Diagnostics;
 
 namespace FhvRoomSearch.ViewModel
 {
     class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
+        private bool _isReloading;
+        private bool _showCalendarViewerAfterReload;
+        private readonly ProgressViewModel _progressViewModel;
 
         #region Commands
 
@@ -40,349 +38,22 @@ namespace FhvRoomSearch.ViewModel
             private set;
         }
 
-        public ICommand SearchCommand
-        {
-            get;
-            private set;
-        }
 
         #endregion
 
-        #region Search Form Data
-
-        private DateTime _selectedDate;
-
-        public DateTime SelectedDate
+        public ProgressViewModel Progress
         {
-            get
-            {
-                return _selectedDate;
-            }
-            set
-            {
-                if (_selectedDate == value)
-                    return;
-                _selectedDate = value;
-                RaisePropertyChanged("SelectedDate");
-            }
+            get { return _progressViewModel; }
         }
-
-        private DateTime _selectedStartTime;
-
-        public DateTime SelectedStartTime
-        {
-            get
-            {
-                return _selectedStartTime;
-            }
-            set
-            {
-                if (_selectedStartTime == value)
-                    return;
-                _selectedStartTime = value;
-                RaisePropertyChanged("SelectedStartTime");
-                if (_selectedStartTime > _selectedEndTime)
-                {
-                    SelectedEndTime = _selectedStartTime.AddMinutes(15);
-                }
-            }
-        }
-
-        private DateTime _selectedEndTime;
-
-        public DateTime SelectedEndTime
-        {
-            get
-            {
-                return _selectedEndTime;
-            }
-            set
-            {
-                if (_selectedEndTime == value)
-                    return;
-                _selectedEndTime = value;
-                RaisePropertyChanged("SelectedEndTime");
-                if (_selectedEndTime < _selectedStartTime)
-                {
-                    SelectedStartTime = _selectedEndTime.AddMinutes(-15);
-                }
-            }
-        }
-
-
-        private IEnumerable<Wing> _displayedWings;
-
-        public IEnumerable<Wing> DisplayedWings
-        {
-            get
-            {
-                return _displayedWings;
-            }
-            private set
-            {
-                if (_displayedWings == value)
-                    return;
-                _displayedWings = value;
-                RaisePropertyChanged("DisplayedWings");
-            }
-        }
-
-        private IEnumerable<Level> _displayedLevels;
-
-        public IEnumerable<Level> DisplayedLevels
-        {
-            get
-            {
-                return _displayedLevels;
-            }
-            private set
-            {
-                if (_displayedLevels == value)
-                    return;
-                _displayedLevels = value;
-                RaisePropertyChanged("DisplayedLevels");
-            }
-        }
-
-        private IEnumerable<Room> _displayedRooms;
-
-        public IEnumerable<Room> DisplayedRooms
-        {
-            get
-            {
-                return _displayedRooms;
-            }
-            private set
-            {
-                if (_displayedRooms == value)
-                    return;
-                _displayedRooms = value;
-                RaisePropertyChanged("DisplayedRooms");
-            }
-        }
-
-
-        private IEnumerable<SearchResult> _searchResults;
-
-        public IEnumerable<SearchResult> SearchResults
-        {
-            get
-            {
-                return _searchResults;
-            }
-            private set
-            {
-                if (_searchResults == value)
-                    return;
-                _searchResults = value;
-                RaisePropertyChanged("SearchResults");
-            }
-        }
-
-
-        private ObservableCollection<Wing> _selectedWings;
-        public ObservableCollection<Wing> SelectedWings
-        {
-            get
-            {
-                return _selectedWings;
-            }
-            private set
-            {
-                if (_selectedWings == value)
-                    return;
-                _selectedWings = value;
-                RaisePropertyChanged("SelectedWings");
-            }
-        }
-
-        private ObservableCollection<Level> _selectedLevels;
-        public ObservableCollection<Level> SelectedLevels
-        {
-            get
-            {
-                return _selectedLevels;
-            }
-            private set
-            {
-                if (_selectedLevels == value)
-                    return;
-                _selectedLevels = value;
-                RaisePropertyChanged("SelectedLevels");
-            }
-        }
-
-        private ObservableCollection<Room> _selectedRooms;
-        public ObservableCollection<Room> SelectedRooms
-        {
-            get
-            {
-                return _selectedRooms;
-            }
-            private set
-            {
-                if (_selectedRooms == value)
-                    return;
-                _selectedRooms = value;
-                RaisePropertyChanged("SelectedRooms");
-            }
-        }
-
-        private RoomExtras _selectedExtras;
-        public RoomExtras SelectedExtras
-        {
-            get
-            {
-                return _selectedExtras;
-            }
-            set
-            {
-                if (_selectedExtras == value)
-                    return;
-                _selectedExtras = value;
-                OnSelectedLevelsChanged(this, null);
-                RaisePropertyChanged("SelectedExtras");
-            }
-        }
-
-        #endregion
-
-        #region Progress
-
-        private bool _isReloading;
-        private bool _showCalendarViewerAfterReload;
-
-        private double _progressValue;
-        public double ProgressValue
-        {
-            get
-            {
-                return _progressValue;
-            }
-            set
-            {
-                if (_progressValue == value)
-                    return;
-                _progressValue = value;
-                RaisePropertyChanged("ProgressValue");
-            }
-        }
-
-        private TaskbarItemProgressState _progressState;
-        public TaskbarItemProgressState ProgressState
-        {
-            get
-            {
-                return _progressState;
-            }
-            set
-            {
-                if (_progressState == value)
-                    return;
-                _progressState = value;
-                RaisePropertyChanged("ProgressState");
-            }
-        }
-
-        private string _progressStatus;
-        public string ProgressStatus
-        {
-            get
-            {
-                return _progressStatus;
-            }
-            set
-            {
-                if (_progressStatus == value)
-                    return;
-                _progressStatus = value;
-                RaisePropertyChanged("ProgressStatus");
-            }
-        }
-
-        #endregion
-
-        public MainViewModel(IDataService dataService)
+       
+        public MainViewModel(IDataService dataService, ProgressViewModel progressViewModel)
         {
             _dataService = dataService;
-            ProgressState = TaskbarItemProgressState.None;
-            ProgressValue = 0;
-            ProgressStatus = "Ready";
+            _progressViewModel = progressViewModel;
             ReloadCoursesCommand = new RelayCommand(ReloadCourses);
             UpdateUrlCommand = new RelayCommand(RequestNewCalendarUrl);
-            SearchCommand = new RelayCommand(PerformSearch,
-                               () => SelectedRooms != null && SelectedRooms.Count > 0);
-
-            ResetData();
-
-            SelectedDate = DateTime.Today;
-            SelectedStartTime = DateTime.Now;
-
-            var today = Today;
-            if (DateTime.Now > today.AddHours(16))
-            {
-                SelectedEndTime = DateTime.Now.AddHours(1);
-            }
-            else if (DateTime.Now >= today.AddHours(12))
-            {
-                SelectedEndTime = today.AddHours(16);
-            }
-            else
-            {
-                SelectedEndTime = today.AddHours(12);
-            }
-            SelectedExtras = RoomExtras.None;
 
         }
-
-        private DateTime Today
-        {
-            get
-            {
-                return new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, 0, 0, 0);
-            }
-        }
-
-        private void ResetData()
-        {
-            DisplayedWings = _dataService.Wings.OrderBy(w => w.Name);
-
-            SelectedWings = new ObservableCollection<Wing>(DisplayedWings);
-            SelectedWings.CollectionChanged += OnSelectedWingsChanged;
-            SelectedLevels = new ObservableCollection<Level>();
-            SelectedLevels.CollectionChanged += OnSelectedLevelsChanged;
-            SelectedRooms = new ObservableCollection<Room>();
-            SelectedRooms.CollectionChanged += OnSelectedRoomsChanged;
-
-            SearchResults = new ObservableCollection<SearchResult>();
-        }
-
-        private void OnSelectedRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            ((RelayCommand)SearchCommand).RaiseCanExecuteChanged();
-        }
-
-        private void OnSelectedLevelsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            DisplayedRooms = from r in _dataService.Rooms
-                             where (r.Extras & SelectedExtras) == SelectedExtras && SelectedLevels.Any(l => l.Id == r.Level.Id)
-                             orderby r.RoomId
-                             select r;
-            //_dataService.Rooms.Where(r => SelectedLevels.Any(l => l.Id == r.Level.Id)).OrderBy(r => r.RoomId);
-        }
-
-        private void OnSelectedWingsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            DisplayedLevels = from l in _dataService.Levels
-                              where SelectedWings.Any(w => w.Id == l.Wing.Id)
-                              orderby l.Name
-                              select l;
-            //DisplayedLevels = _dataService.Levels.Where(
-            //l => SelectedWings.Any(w => w.Id == l.Wing.Id)).OrderBy(l => l.Name);
-        }
-
-
-
         #region Course Reloading
 
         public void ReloadCourses()
@@ -412,36 +83,13 @@ namespace FhvRoomSearch.ViewModel
             _isReloading = false;
         }
 
-        private void UpdateProgress(TaskbarItemProgressState state, double value, string status)
-        {
-            if (!DispatcherHelper.UIDispatcher.CheckAccess())
-            {
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action<TaskbarItemProgressState, double, string>(UpdateProgress), state, value, status);
-                return;
-            }
-
-            ProgressState = state;
-            ProgressValue = value;
-            ProgressStatus = status;
-        }
-
-        private void UpdateProgress(double value)
-        {
-            if (!DispatcherHelper.UIDispatcher.CheckAccess())
-            {
-                DispatcherHelper.UIDispatcher.BeginInvoke(new Action<double>(UpdateProgress), value);
-                return;
-            }
-
-            ProgressValue = value;
-        }
-
+        
         private void DoReloadCourses(string url)
         {
             try
             {
                 _showCalendarViewerAfterReload = false;
-                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server (Checking for Changes)");
+                _progressViewModel.UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server (Checking for Changes)");
 
                 //
                 // Check for Changes
@@ -474,7 +122,7 @@ namespace FhvRoomSearch.ViewModel
                 //
 
                 // We need to load the file
-                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server (Download)");
+                _progressViewModel.UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Connecting to Server (Download)");
                 request = WebRequest.Create(url);
                 request.Proxy = null;
 
@@ -488,12 +136,12 @@ namespace FhvRoomSearch.ViewModel
                 StreamReader reader = new StreamReader(remoteStream, encoding);
 
                 // create parser
-                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Setup default data");
+                _progressViewModel.UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Setup default data");
                 FhvICalParser parser = new FhvICalParser(_dataService);
                 parser.Prepare();
 
                 // load data
-                UpdateProgress(
+                _progressViewModel.UpdateProgress(
                     contentLength == -1 ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal, 0,
                     "Reload courses from event");
                 string line;
@@ -504,18 +152,18 @@ namespace FhvRoomSearch.ViewModel
                         double percentage = remoteStream.ReadByteCount / (double)contentLength;
                         if (percentage > 1)
                         {
-                            UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Reload courses from event");
+                            _progressViewModel.UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Reload courses from event");
                         }
                         else
                         {
-                            UpdateProgress(percentage);
+                            _progressViewModel.UpdateProgress(percentage);
                         }
                     }
                     parser.ProcessLine(line);
                 }
 
                 // store everything in the new database
-                UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Saving data to local storage");
+                _progressViewModel.UpdateProgress(TaskbarItemProgressState.Indeterminate, 0, "Saving data to local storage");
 
 
                 if (_dataService.ResetDatabase(parser.ParsedData))
@@ -523,8 +171,7 @@ namespace FhvRoomSearch.ViewModel
                     // update settings for next download
                     _dataService.CalendarFileSize = remoteStream.ReadByteCount;
                     _dataService.CalendarLastDownload = lastChange;
-
-                    ResetData();
+                    _progressViewModel.InvokeDataReloaded(EventArgs.Empty);
                 }
                 else
                 {
@@ -537,7 +184,7 @@ namespace FhvRoomSearch.ViewModel
             }
             finally
             {
-                UpdateProgress(TaskbarItemProgressState.None, 0, "Ready");
+                _progressViewModel.UpdateProgress(TaskbarItemProgressState.None, 0, "Ready");
                 // We have a lot of unneeded objects in our memory. let the GC get rid of them
                 GC.Collect();
             }
@@ -592,34 +239,5 @@ namespace FhvRoomSearch.ViewModel
                                        ), "calendar");
         }
         #endregion
-
-
-        public void PerformSearch()
-        {
-            if (SelectedRooms.Count == 0)
-            {
-                SearchResults = new SearchResult[0];
-                return;
-            }
-
-            ProgressState = TaskbarItemProgressState.Indeterminate;
-            ProgressStatus = "Searching Rooms";
-
-            Task.Factory.StartNew(DoSearchAsync).ContinueWith(
-                t =>
-                {
-                    ProgressState = TaskbarItemProgressState.None;
-                    ProgressStatus = "Ready";
-                    RaisePropertyChanged("SearchResults");
-                }, TaskContinuationOptions.ExecuteSynchronously);
-        }
-
-        private void DoSearchAsync()
-        {
-            DateTime start = SelectedDate.Date + SelectedStartTime.TimeOfDay;
-            DateTime end = SelectedDate.Date + SelectedEndTime.TimeOfDay;
-
-            _searchResults = _dataService.PerformSearch(start, end, SelectedRooms);
-        }
     }
 }

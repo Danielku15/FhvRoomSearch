@@ -42,11 +42,15 @@ namespace FhvRoomSearch.Model
         private Config GetConfigOrCreate(string key)
         {
             Config entry = (from c in _database.ConfigSet
-                        where c.Key == key
-                        select c).FirstOrDefault();
-            if(entry == null)
+                            where c.Key == key
+                            select c).FirstOrDefault();
+            if (entry == null)
             {
-                entry = new Config {Key = key, Value = ""};
+                entry = new Config
+                {
+                    Key = key,
+                    Value = ""
+                };
                 _database.ConfigSet.AddObject(entry);
             }
             return entry;
@@ -192,7 +196,7 @@ namespace FhvRoomSearch.Model
         // {2} Now
         // {3} Rooms
         private const string UnoccupiedRoomsSql =
-            "SELECT a.Id, COUNT(c.Id) AS ConflictingCourses FROM RoomSet AS a  " +
+            "SELECT a.Id, COUNT(c.Id) AS ConflictingCourses, d.Id as CurrentCourseId, e.Id as NextCourseId FROM RoomSet AS a " +
             "LEFT OUTER JOIN RoomCourse AS b ON b.Rooms_Id = a.Id " +
             //"-- Conflicting Courses " +
             "LEFT OUTER JOIN CourseSet AS c ON c.Id = b.Course_Id AND {0} <= c.EndTime AND {1} >= c.StartTime " +
@@ -200,7 +204,8 @@ namespace FhvRoomSearch.Model
             "LEFT OUTER JOIN CourseSet AS d ON d.Id = b.Course_Id AND {2} <= d.EndTime AND {2} >= d.StartTime  " +
             //"-- All Upcoming Courses " +
             "LEFT OUTER JOIN CourseSet AS e ON e.Id = b.Course_Id AND e.StartTime >= {2} " +
-            "WHERE (a.Id IN ({3})) GROUP BY a.Id";
+            "WHERE (a.Id IN ({3})) GROUP BY a.Id,a.RoomId, d.Id, e.Id " + 
+            "ORDER BY a.RoomId";
 
         public IEnumerable<SearchResult> PerformSearch(DateTime start, DateTime end, IList<Room> rooms)
         {
@@ -216,38 +221,139 @@ namespace FhvRoomSearch.Model
             string nowStr = "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:00") + "'";
 
             string query = string.Format(UnoccupiedRoomsSql, startStr, endStr, nowStr, inClause);
-            Debug.WriteLine(query);
             var queryResults = _database.ExecuteStoreQuery<QueryResult>(query);
-
-
 
             // 
             // Load Courses
             //
             List<SearchResult> searchResults = new List<SearchResult>();
+            Dictionary<int, SearchResult> duplicates = new Dictionary<int, SearchResult>();
             foreach (QueryResult queryResult in queryResults)
             {
-                Room room = (from r in rooms
-                             where queryResult.Id == r.Id
-                             select r).First();
-                Course currentCourse = null;
+                SearchResult searchResult;
+                if (duplicates.ContainsKey(queryResult.Id))
+                {
+                    searchResult = duplicates[queryResult.Id];
+                }
+                else
+                {
+                    searchResult = new SearchResult();
+                    searchResults.Add(searchResult);
+                    duplicates.Add(queryResult.Id, searchResult);
+                }
+
+
+                searchResult.FreeRoom = (from r in rooms
+                                         where queryResult.Id == r.Id
+                                         select r).First();
+
 
                 if (queryResult.CurrentCourseId.HasValue)
                 {
                     int currentCourseId = queryResult.CurrentCourseId.GetValueOrDefault();
-                    currentCourse = (from c in _database.CourseSet
-                                     where currentCourseId == c.Id
-                                     select c).FirstOrDefault();
+                    searchResult.CurrentCourse = (from c in _database.CourseSet
+                                                  where currentCourseId == c.Id
+                                                  select c).FirstOrDefault();
                 }
 
-                RoomState state = queryResult.ConflictingCourses == 0 ? RoomState.Unoccupied : RoomState.Occupied;
+                if(queryResult.NextCourseStart.HasValue)
+                {
+                    searchResult.NextCourseStart = queryResult.NextCourseStart.GetValueOrDefault();
+                }
 
-                SearchResult searchResult = new SearchResult(room, state, currentCourse, queryResult.NextCourseStart);
-                searchResults.Add(searchResult);
+                if(searchResult.RoomState == RoomState.Unoccupied)
+                {
+                    searchResult.RoomState = queryResult.ConflictingCourses == 0
+                                                 ? RoomState.Unoccupied
+                                                 : RoomState.Occupied;
+                }
             }
 
             return searchResults;
-        }
+        }  
+        
+        //// {0} StartTime
+        //// {1} EndTime
+        //// {2} Now
+        //// {3} Rooms
+        //private const string UnoccupiedRoomsSql =
+        //    "SELECT a.Id, COUNT(c.Id) AS ConflictingCourses, d.Id as CurrentCourseId, MIN(e.StartTime) as NextCourseStart FROM RoomSet AS a " +
+        //    "LEFT OUTER JOIN RoomCourse AS b ON b.Rooms_Id = a.Id " +
+        //    //"-- Conflicting Courses " +
+        //    "LEFT OUTER JOIN CourseSet AS c ON c.Id = b.Course_Id AND {0} <= c.EndTime AND {1} >= c.StartTime " +
+        //    //"-- Current Course  " +
+        //    "LEFT OUTER JOIN CourseSet AS d ON d.Id = b.Course_Id AND {2} <= d.EndTime AND {2} >= d.StartTime  " +
+        //    //"-- All Upcoming Courses " +
+        //    "LEFT OUTER JOIN CourseSet AS e ON e.Id = b.Course_Id AND e.StartTime >= {2} " +
+        //    "WHERE (a.Id IN ({3})) GROUP BY a.Id, d.Id";
+
+        //public IEnumerable<SearchResult> PerformSearch(DateTime start, DateTime end, IList<Room> rooms)
+        //{
+        //    // 
+        //    // Load Query Results
+        //    // 
+        //    int[] roomIds = (from r in rooms
+        //                     select r.Id).ToArray();
+        //    string inClause = string.Join(", ", roomIds);
+
+        //    string startStr = "'" + start.ToString("yyyy-MM-dd HH:mm:00") + "'";
+        //    string endStr = "'" + end.ToString("yyyy-MM-dd HH:mm:00") + "'";
+        //    string nowStr = "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:00") + "'";
+
+        //    string query = string.Format(UnoccupiedRoomsSql, startStr, endStr, nowStr, inClause);
+        //    Debug.WriteLine(query);
+        //    var queryResults = _database.ExecuteStoreQuery<QueryResult>(query);
+
+
+
+        //    // 
+        //    // Load Courses
+        //    //
+        //    List<SearchResult> searchResults = new List<SearchResult>();
+        //    Dictionary<int, SearchResult> duplicates = new Dictionary<int, SearchResult>();
+        //    foreach (QueryResult queryResult in queryResults)
+        //    {
+        //        SearchResult searchResult;
+        //        if (duplicates.ContainsKey(queryResult.Id))
+        //        {
+        //            searchResult = duplicates[queryResult.Id];
+        //        }
+        //        else
+        //        {
+        //            searchResult = new SearchResult();
+        //            searchResults.Add(searchResult);
+        //            duplicates.Add(queryResult.Id, searchResult);
+        //        }
+
+
+        //        searchResult.FreeRoom = (from r in rooms
+        //                                 where queryResult.Id == r.Id
+        //                                 select r).First();
+
+
+        //        if (queryResult.CurrentCourseId.HasValue)
+        //        {
+        //            int currentCourseId = queryResult.CurrentCourseId.GetValueOrDefault();
+        //            searchResult.CurrentCourse = (from c in _database.CourseSet
+        //                                          where currentCourseId == c.Id
+        //                                          select c).FirstOrDefault();
+        //        }
+
+        //        if(queryResult.NextCourseStart.HasValue)
+        //        {
+        //            searchResult.NextCourseStart = queryResult.NextCourseStart.GetValueOrDefault();
+        //        }
+
+        //        if(searchResult.RoomState == RoomState.Unoccupied)
+        //        {
+        //            searchResult.RoomState = queryResult.ConflictingCourses == 0
+        //                                         ? RoomState.Unoccupied
+        //                                         : RoomState.Occupied;
+        //        }
+        //    }
+
+        //    return searchResults;
+        //}
 
         internal class QueryResult
         {

@@ -2,7 +2,7 @@
 
 namespace FhvRoomSearch.Model
 {
-    public class SearchResult
+    public class SearchResult : IComparable<SearchResult>
     {
         public Room FreeRoom
         {
@@ -28,6 +28,10 @@ namespace FhvRoomSearch.Model
             set;
         }
 
+        public SearchResult()
+        {
+            RoomState = RoomState.Unoccupied;
+        }
 
         public SearchResult(Room freeRoom, RoomState roomState, Course currentCourse, DateTime? nextCourseStart)
         {
@@ -37,6 +41,18 @@ namespace FhvRoomSearch.Model
             NextCourseStart = nextCourseStart;
         }
 
+
+        public int CompareTo(SearchResult other)
+        {
+            if (ReferenceEquals(null, other))
+                return 1;
+            if (ReferenceEquals(null, other.FreeRoom))
+                return 1;
+            if (ReferenceEquals(null, FreeRoom))
+                return -1;
+            return FreeRoom.CompareTo(other.FreeRoom);
+
+        }
     }
 
     public enum RoomState

@@ -198,7 +198,7 @@ namespace FhvRoomSearch.Import
                 }
                 else if (line.StartsWith("Gruppe: "))
                 {
-                    course.Lecturer = line.Substring(8);
+                    course.Group = line.Substring(8);
                 }
                 else if (line.StartsWith("Hinweis: "))
                 {

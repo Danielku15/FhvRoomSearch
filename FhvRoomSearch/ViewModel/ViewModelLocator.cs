@@ -21,7 +21,10 @@ namespace FhvRoomSearch.ViewModel
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<RoomSearchViewModel>();
             SimpleIoc.Default.Register<RoomConverterViewModel>();
+            SimpleIoc.Default.Register<ProgressViewModel>();
+            SimpleIoc.Default.Register<RoomCourseViewModel>();
         }
 
         public MainViewModel Main
@@ -37,6 +40,30 @@ namespace FhvRoomSearch.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<RoomConverterViewModel>();
+            }
+        }
+
+        public RoomSearchViewModel Searcher
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<RoomSearchViewModel>();
+            }
+        }
+
+        public ProgressViewModel Progress
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ProgressViewModel>();
+            }
+        }
+
+        public RoomCourseViewModel RoomCourse
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<RoomCourseViewModel>();
             }
         }
 

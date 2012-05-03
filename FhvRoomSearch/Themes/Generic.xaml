@@ -1,0 +1,121 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:FhvRoomSearch.Controls" xmlns:Converter="clr-namespace:FhvRoomSearch.Converter">
+
+    <Converter:SimpleArithmeticsValueConverter x:Key="duplicateConverter" Operand="2" Operation="Multiply" />
+
+    <Style TargetType="{x:Type Controls:Calendar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:Calendar}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <UniformGrid Rows="1" Grid.Column="1">
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Monday" />
+                            </Border>
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Tuesday" />
+                            </Border>
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Wednesday" />
+                            </Border>
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Thursday" />
+                            </Border>
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Friday" />
+                            </Border>
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Saturday" />
+                            </Border>
+                            <Border HorizontalAlignment="Center">
+                                <TextBlock Text="Sunday" />
+                            </Border>
+                        </UniformGrid>
+
+
+                        <ScrollViewer Grid.ColumnSpan="2" Grid.Row="1" Padding="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Controls:CalendarTimeScale x:Name="timeScale" Grid.Column="0" Margin="0" />
+
+                                <Border BorderThickness="1" BorderBrush="#A9B0B8" Grid.Column="1" Padding="0" Margin="0" >
+                                    <UniformGrid Rows="1" HorizontalAlignment="Stretch">
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                        <Controls:CalendarDay BlockHeight="{Binding ElementName=timeScale,Path=BlockHeight}" Blocks="{Binding ElementName=timeScale,Path=Blocks}" />
+                                    </UniformGrid>
+                                </Border>
+                            </Grid>
+
+                        </ScrollViewer>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type Controls:CalendarTimeScale}">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:CalendarTimeScale}">
+                    <ItemsControl ItemsSource="{TemplateBinding Blocks}" Padding="0" Margin="0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0" Padding="0" BorderThickness="0,1,0,0" BorderBrush="#A9B0B8" Height="{Binding Path=(Controls:CalendarTimeScale.BlockHeight), Converter={StaticResource duplicateConverter}, RelativeSource={RelativeSource AncestorType={x:Type Controls:CalendarTimeScale}}}" >
+                                    <TextBlock FontSize="16" HorizontalAlignment="Center">
+                                       <Run Text="{Binding HugeLabel}" />
+                                       <Run BaselineAlignment="Superscript" FontSize="12" Text="{Binding SmallLabel}" />
+                                    </TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type Controls:CalendarDay}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:CalendarDay}">
+                    <ItemsControl ItemsSource="{TemplateBinding Blocks}" Margin="0" Padding="0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0,0,1,1" BorderBrush="#A9B0B8" Height="{Binding Path=(Controls:CalendarDay.BlockHeight), Converter={StaticResource duplicateConverter}, RelativeSource={RelativeSource AncestorType={x:Type Controls:CalendarDay}}}" Margin="0" Padding="0"
+                                                            VerticalAlignment="Top">
+                                    <Border BorderThickness="0,0,0,1" VerticalAlignment="Top" BorderBrush="#D5E1F1" Height="{Binding Path=(Controls:CalendarDay.BlockHeight), RelativeSource={RelativeSource AncestorType={x:Type Controls:CalendarDay}}}" Margin="0" Padding="0">
+                                    </Border>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

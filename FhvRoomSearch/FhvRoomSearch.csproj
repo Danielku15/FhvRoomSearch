@@ -73,6 +73,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FhvRoomSearch.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -85,6 +88,9 @@
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\MvvmLight\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="ReuxablesLegacy">
+      <HintPath>..\Libraries\Reuxables\ReuxablesLegacy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -109,7 +115,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WPFToolkit.Extended">
+    <Reference Include="WPFToolkit.Extended, Version=1.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\WpfToolkit\WPFToolkit.Extended.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -117,15 +124,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behavior\CalendarUrlBehavior.cs" />
-    <Compile Include="Behavior\CalendarUrlMessage.cs" />
-    <Compile Include="Behavior\IListItemConverter.cs" />
-    <Compile Include="Behavior\MessageBoxBehavior.cs" />
-    <Compile Include="Behavior\MultiSelectorBehavior.cs" />
-    <Compile Include="Behavior\TwoListSynchronizer.cs" />
+    <Compile Include="Controls\CalendarDay.cs" />
+    <Compile Include="Converter\Behavior\CalendarUrlBehavior.cs" />
+    <Compile Include="Converter\Behavior\CalendarUrlMessage.cs" />
+    <Compile Include="Converter\Behavior\IListItemConverter.cs" />
+    <Compile Include="Converter\Behavior\MessageBoxBehavior.cs" />
+    <Compile Include="Converter\Behavior\MultiSelectorBehavior.cs" />
+    <Compile Include="Converter\Behavior\TwoListSynchronizer.cs" />
     <Compile Include="CalendarUrlDialog.xaml.cs">
       <DependentUpon>CalendarUrlDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Calendar.cs" />
+    <Compile Include="Controls\CalendarTimeScale.cs" />
     <Compile Include="Controls\MinuteDateTimeUpDown.cs" />
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Controls\TextAdorner.cs" />
@@ -134,7 +144,10 @@
     <Compile Include="Converter\ProgressStateVisibilityConverter.cs" />
     <Compile Include="Converter\RoomExtrasFlagValueConverter.cs" />
     <Compile Include="Converter\RoomStateColorConverter.cs" />
+    <Compile Include="Converter\RoomStateStyleConverter.cs" />
+    <Compile Include="Converter\SimpleArithmeticsValueConverter.cs" />
     <Compile Include="IO\ByteCountingStream.cs" />
+    <Compile Include="Model\Course.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Design\DesignDataService.cs" />
@@ -147,8 +160,15 @@
     <Compile Include="Model\Level.cs" />
     <Compile Include="Model\SearchResult.cs" />
     <Compile Include="Model\Wing.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="RoomConverterWindow.xaml.cs">
       <DependentUpon>RoomConverterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RoomCourseView.xaml.cs">
+      <DependentUpon>RoomCourseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RoomSearchView.xaml.cs">
+      <DependentUpon>RoomSearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Model\RoomCourseModel.Designer.cs">
@@ -160,7 +180,10 @@
     <Compile Include="Model\RoomChairTypes.cs" />
     <Compile Include="Model\RoomExtras.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\ProgressViewModel.cs" />
     <Compile Include="ViewModel\RoomConverterViewModel.cs" />
+    <Compile Include="ViewModel\RoomCourseViewModel.cs" />
+    <Compile Include="ViewModel\RoomSearchViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -229,6 +252,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="RoomCourseView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RoomSearchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MyTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\RoomCourseModel.sdf">
@@ -236,6 +275,13 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterResolveReferences">
+    <ItemGroup>
+      <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
+        <LogicalName>%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

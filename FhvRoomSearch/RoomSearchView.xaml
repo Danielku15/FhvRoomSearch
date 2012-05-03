@@ -1,0 +1,160 @@
+﻿<UserControl x:Class="FhvRoomSearch.RoomSearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:Toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=WPFToolkit.Extended" xmlns:Controls="clr-namespace:FhvRoomSearch.Controls" xmlns:bh="clr-namespace:FhvRoomSearch.Behavior" xmlns:Model="clr-namespace:FhvRoomSearch.Model" xmlns:cv="clr-namespace:FhvRoomSearch.Converter" mc:Ignorable="d" 
+             DataContext="{Binding Searcher, Source={StaticResource Locator}}"
+             d:DesignHeight="474" d:DesignWidth="795">
+    <UserControl.Resources>
+        <cv:RoomExtrasFlagValueConverter x:Key="roomExtrasConverter" />
+        <cv:ProgressStateBoolConverter x:Key="progressStateEnableConverter" TrueValue="None" />
+        <cv:RoomStateColorConverter x:Key="roomStateColorConverter" UnoccupiedBrush="#00860b"  OccupiedBrush="#860000" />
+        <cv:RoomStateStyleConverter x:Key="roomStateStyleConverter" OccupiedStyle="{StaticResource ResultBoxOccupied}"  UnoccupiedStyle="{StaticResource ResultBoxUnoccupied}" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" MinHeight="250" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border  Grid.Row="0" >
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Color="#FFFFFF" Offset="0" />
+                        <GradientStop Color="#EAEDF1" Offset="1" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Border.Background>
+            <GroupBox Header="Find a Room" Margin="3" IsEnabled="{Binding Progress.ProgressState, Converter={StaticResource progressStateEnableConverter}}">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <GroupBox Header="Date">
+                            <Toolkit:DateTimeUpDown Grid.Column="1" Value="{Binding SelectedDate}" Format="LongDate"></Toolkit:DateTimeUpDown>
+                        </GroupBox>
+
+                        <GroupBox Header="From" Grid.Column="1" >
+                            <Controls:MinuteDateTimeUpDown Step="15" Value="{Binding SelectedStartTime}" />
+                        </GroupBox>
+
+                        <GroupBox Header="Till" Grid.Column="2">
+                            <Controls:MinuteDateTimeUpDown Step="15"  Value="{Binding SelectedEndTime}" />
+                        </GroupBox>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <GroupBox>
+                            <GroupBox.Header>
+                                <TextBlock Text="{Binding SelectedWings.Count,StringFormat='Wing (\{0\})'}" />
+                            </GroupBox.Header>
+                            <ListBox AlternationCount="2" Style="{StaticResource ListBoxStyle}" Grid.Row="1" ItemsSource="{Binding DisplayedWings}" SelectionMode="Extended"
+                                 bh:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedWings}"></ListBox>
+                        </GroupBox>
+
+                        <GroupBox  Grid.Column="1">
+                            <GroupBox.Header>
+                                <TextBlock Text="{Binding SelectedLevels.Count,StringFormat='Level (\{0\})'}" />
+                            </GroupBox.Header>
+                            <ListBox AlternationCount="2" Style="{StaticResource ListBoxStyle}" Grid.Column="1" ItemsSource="{Binding DisplayedLevels}" Grid.Row="1" SelectionMode="Extended"
+                             bh:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedLevels}"></ListBox>
+                        </GroupBox>
+
+                        <GroupBox Grid.Column="2">
+                            <GroupBox.Header>
+                                <TextBlock Text="{Binding SelectedRooms.Count,StringFormat='Rooms (\{0\})'}" />
+                            </GroupBox.Header>
+                            <ListBox AlternationCount="2" Style="{StaticResource ListBoxStyle}" Grid.Column="2" ItemsSource="{Binding DisplayedRooms}" Grid.Row="1" SelectionMode="Extended"
+                             bh:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedRooms}"></ListBox>
+                        </GroupBox>
+
+                        <GroupBox  Grid.Column="3" Header="Room Extras">
+                            <Border Grid.Column="3" Grid.Row="1" Margin="3" BorderThickness="1">
+                                <ScrollViewer>
+                                    <StackPanel>
+                                        <StackPanel.Resources>
+                                            <Style TargetType="{x:Type CheckBox}">
+                                                <Setter Property="Margin" Value="5,5,5,0" />
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <CheckBox Content="Blackboard" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Blackboard}}" />
+                                        <CheckBox Content="Projector" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Projector}}" />
+                                        <CheckBox Content="Speaker" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Speaker}}" />
+                                        <CheckBox Content="Microphone" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Microphone}}" />
+                                        <CheckBox Content="SilverScreen" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.SilverScreen}}" />
+                                        <CheckBox Content="Overhead" IsChecked="{Binding SelectedExtras, Converter={StaticResource roomExtrasConverter}, ConverterParameter={x:Static Model:RoomExtras.Overhead}}" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Border>
+                        </GroupBox>
+
+                    </Grid>
+                    <Button Grid.Row="2" Command="{Binding SearchCommand}" Padding="4">Search</Button>
+                </Grid>
+
+            </GroupBox>
+        </Border>
+        <GridSplitter ResizeDirection="Rows" Grid.Row="0" Width="Auto" Height="3" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+        <ScrollViewer Grid.Row="1"  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding SearchResults}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel  />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Grid.Row="2" Style="{Binding RoomState, Converter={StaticResource roomStateStyleConverter}}">
+                            <TextBlock Margin="5">
+                        <Bold>Room:</Bold> <TextBlock Text="{Binding FreeRoom.RoomId}" />
+                        <LineBreak /><Bold>Status:</Bold> <TextBlock Text="{Binding RoomState}" Foreground="{Binding RoomState, Converter={StaticResource roomStateColorConverter}}" />
+                        <LineBreak /><Bold>Current Course:</Bold> 
+                        <LineBreak /><TextBlock>
+                            <TextBlock.Text>
+                                <PriorityBinding>
+                                    <Binding Path="CurrentCourse.Title" />
+                                    <Binding Source="None" />
+                                </PriorityBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <LineBreak /><TextBlock Text="{Binding CurrentCourse.Group}" />
+                        <LineBreak /><TextBlock DataContext="{Binding CurrentCourse}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0:HH:mm} - {1:HH:mm}, {0:dd.MM.yyyy}">
+                                    <Binding Path="StartTime" />
+                                    <Binding Path="EndTime" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <LineBreak /><Bold>Next Course Start:</Bold> 
+                        <LineBreak /><TextBlock Text="{Binding NextCourseStart,StringFormat='\{0:HH:mm\}, \{0:dd.MM.yyyy}',TargetNullValue='None'}" />
+                         </TextBlock>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

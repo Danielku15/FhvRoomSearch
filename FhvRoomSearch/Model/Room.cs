@@ -2,7 +2,7 @@
 
 namespace FhvRoomSearch.Model
 {
-    partial class Room : IEquatable<Room>
+    partial class Room : IEquatable<Room>, IComparable<Room>
     {
         public RoomChairTypes ChairType
         {
@@ -20,6 +20,13 @@ namespace FhvRoomSearch.Model
         {
             get { return (RoomExtras)ExtrasValue; }
             set { ExtrasValue = (int)value; }
+        }
+
+        public int CompareTo(Room other)
+        {
+            if (ReferenceEquals(null, other)) return 1;
+            if (ReferenceEquals(this, other)) return 0;
+            return RoomId.CompareTo(other.RoomId);
         }
 
         public override string ToString()
@@ -56,5 +63,7 @@ namespace FhvRoomSearch.Model
         {
             return !Equals(left, right);
         }
+
+
     }
 }
